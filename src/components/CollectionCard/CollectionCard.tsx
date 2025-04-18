@@ -5,19 +5,19 @@ import { Button } from '@src/components/ui/button';
 import Image from 'next/image';
 
 interface CollectionCardProps {
-  id: number;
-  name: string;
+  id: string;
+  title: string;
   price: number;
   rating: number;
-  image: string;
+  imageUrl: string;
 }
 
 const CollectionCard = ({
   id,
-  name,
+  title,
   price,
   rating,
-  image,
+  imageUrl,
 }: CollectionCardProps) => {
   const addToCart = () => {
     console.log('add to cart');
@@ -25,7 +25,7 @@ const CollectionCard = ({
   return (
     <Card
       key={id}
-      className="group border-0 bg-[#e0e5ce] rounded-[24px] overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+      className="group gap-2 border-0 bg-[#e0e5ce] rounded-[24px] overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
     >
       <CardHeader className="p-0 relative">
         <div className="absolute inset-0 h-[295px] bg-black/40 opacity-0 -translate-y-2 transition-opacity group-hover:opacity-100 z-10" />
@@ -33,8 +33,8 @@ const CollectionCard = ({
           Quick View
         </Button>
         <Image
-          src={image || '/placeholder.svg'}
-          alt={name}
+          src={imageUrl || '/placeholder.svg'}
+          alt={title}
           width={400}
           height={400}
           className="h-[280px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -42,7 +42,7 @@ const CollectionCard = ({
       </CardHeader>
       <CardContent className="p-6 space-y-4">
         <div>
-          <h4 className="text-lg font-semibold mb-1 line-clamp-1">{name}</h4>
+          <h4 className="text-lg font-semibold mb-1 line-clamp-1">{title}</h4>
           <div className="flex items-center gap-2">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
