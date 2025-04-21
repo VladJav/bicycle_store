@@ -1,8 +1,8 @@
 'use client';
-
 import { Card, CardContent, CardHeader } from '@src/components/ui/card';
 import { Button } from '@src/components/ui/button';
 import Image from 'next/image';
+import useCartStore from '@src/store/useCartStore'; 
 
 interface CollectionCardProps {
   id: string;
@@ -19,9 +19,13 @@ const CollectionCard = ({
   rating,
   imageUrl,
 }: CollectionCardProps) => {
-  const addToCart = () => {
-    console.log('add to cart');
+  const { addToCart, setIsOpen } = useCartStore();
+
+  const handleAddToCart = () => {
+    addToCart(id);
+    setIsOpen(true);
   };
+
   return (
     <Card
       key={id}
@@ -67,7 +71,7 @@ const CollectionCard = ({
             variant="outline"
             size="sm"
             className="rounded-full hover:bg-[#415444] hover:text-white transition-colors"
-            onClick={addToCart}
+            onClick={handleAddToCart}
           >
             Add to Cart
           </Button>

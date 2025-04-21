@@ -1,9 +1,13 @@
+'use client';
 import { Search, Bell, ShoppingCart } from 'lucide-react';
 import { Button } from '@src/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@src/components/ui/avatar';
 import { Input } from '@src/components/ui/input';
+import useCartStore from '@src/store/useCartStore';
 
 const MainHeader = () => {
+  const { toggleCart } = useCartStore();
+
   return (
     <header className="mb-8 flex items-center justify-between">
       <div className="space-y-1">
@@ -20,7 +24,7 @@ const MainHeader = () => {
         <Button size="icon" variant="ghost">
           <Bell className="h-5 w-5" />
         </Button>
-        <Button size="icon" variant="ghost">
+        <Button size="icon" variant="ghost" onClick={toggleCart}>
           <ShoppingCart className="h-5 w-5" />
         </Button>
         <Avatar className="w-10 h-10">

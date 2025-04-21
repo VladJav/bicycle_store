@@ -26,7 +26,7 @@ export default async function Home() {
           ))}
         </div>
       </main>
-      <CartSidebar />
+      <CartSidebar bicycles={bicycles} />
     </div>
   );
 }

@@ -24,3 +24,35 @@ model Bicycle {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Order {
+  id          String   @id @default(uuid())
+  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id])
+  bicycleId   Int
+  createdAt   DateTime @default(now())
+}
+
+model User {
+  id               String    @id @default(uuid())
+  avatarUrl        String
+  fullName         String
+  email            String
+  phone            String
+  password         String
+  addresses        Address[]
+  defaultAddressId String?   @unique
+  defaultAddress   Address?  @relation("DefaultAddress", fields: [defaultAddressId], references: [id]) // Optional relation
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Address {
+  id          String  @id @default(uuid())
+  address     String
+  city        String
+  postalCode  String
+  country     String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+}
