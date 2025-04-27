@@ -2,20 +2,110 @@
 import Link from 'next/link';
 
 import { Formik, Field, FieldProps, Form } from 'formik';
+import * as Yup from 'yup';
 import { Button } from '@src/components/ui/button';
 import { Checkbox } from '@src/components/ui/checkbox';
 import { Input } from '@src/components/ui/input';
 import { Label } from '@src/components/ui/label';
 import PasswordField from '@src/components/ui/password-field';
 import { signIn } from 'next-auth/react';
+import { registerUser, sendVerificationEmail } from '@src/actions/registerUser';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+
+interface SignUpFormValues {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  agreeTerms: boolean;
+  verificationToken?: string;
+}
+
+const SignUpSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(50, 'Name is too long')
+    .required('Name is required'),
+  email: Yup.string()
+    .email('Invalid email address')
+    .required('Email is required'),
+  password: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one number')
+    .required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Confirm password is required'),
+  verificationToken: Yup.string()
+    .test('conditional-required', 'Verification code is required', function(value) {
+      const isVerificationShown = this.options.context!.showVerification;
+      if (isVerificationShown && !value) {
+        return false;
+      }
+      return true;
+    }),
+});
 
 export default function SignUpPage() {
-  const initialValues = {
+  const initialValues: SignUpFormValues = {
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
     agreeTerms: false,
+    verificationToken: '',
+  };
+  const [showVerification, setShowVerification] = useState(false);
+  const [verificationToken, setVerificationToken] = useState<number | null>();
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [verificationError, setVerificationError] = useState('');
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => {
+        setResendCooldown(resendCooldown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCooldown]);
+
+  const handleSubmit = async (values: SignUpFormValues) => {
+    setVerificationError('');
+    if (!showVerification) {
+      try {
+        const token = await sendVerificationEmail(values.email);
+        setVerificationToken(token);
+        setShowVerification(true);
+        return;
+      } catch (error: unknown) {
+        console.error('Verification email error:', error);
+        toast('Email Verification Failed', {
+          position: 'bottom-left',
+          description: 'Could not send verification email. Please check your email address and try again.',
+        });
+        return;
+      }
+    }
+
+    console.log(values.verificationToken, verificationToken);
+    if (values.verificationToken !== String(verificationToken)) {
+      setVerificationError('Invalid verification code');
+      return;
+    }
+    console.log(2);
+    
+    try {
+      await registerUser(values.name, values.email, values.password);
+    } catch (error) {
+      console.log(error);
+      toast('Account Creation Failed', {
+        position: 'bottom-left',
+        description: 'An account with this email already exists. Please sign in or use a different email address.',
+      });
+    }
   };
 
   return (
@@ -27,11 +117,15 @@ export default function SignUpPage() {
         </p>
       </div>
 
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(data) => console.log(data)}
+      <Formik 
+        initialValues={initialValues} 
+        onSubmit={handleSubmit} 
+        validationSchema={SignUpSchema}
+        validateOnChange={false}
+        validateOnBlur={true}
+        context={{ showVerification }}
       >
-        {() => {
+        {({ values, errors, touched }) => {
           return (
             <Form className="space-y-4">
               <Field name="name">
@@ -44,7 +138,11 @@ export default function SignUpPage() {
                         placeholder="John Doe"
                         {...field}
                         required
+                        className={errors.name && touched.name ? 'border-red-500' : ''}
                       />
+                      {errors.name && touched.name && (
+                        <p className="text-red-500 text-xs mt-1">{errors.name}</p>
+                      )}
                     </div>
                   );
                 }}
@@ -61,7 +159,11 @@ export default function SignUpPage() {
                         {...field}
                         placeholder="name@example.com"
                         required
+                        className={errors.email && touched.email ? 'border-red-500' : ''}
                       />
+                      {errors.email && touched.email && (
+                        <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                      )}
                     </div>
                   );
                 }}
@@ -69,13 +171,37 @@ export default function SignUpPage() {
 
               <Field name="password">
                 {({ field }: FieldProps) => {
-                  return <PasswordField label="Password" {...field} />;
+                  return (
+                    <>
+                      <div className={errors.password && touched.password ? 'border-red-500 rounded' : ''}>
+                        <PasswordField 
+                          label="Password" 
+                          {...field}
+                        />
+                      </div>
+                      {errors.password && touched.password && (
+                        <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                      )}
+                    </>
+                  );
                 }}
               </Field>
 
               <Field name="confirmPassword">
                 {({ field }: FieldProps) => {
-                  return <PasswordField label="Confirm Password" {...field} />;
+                  return (
+                    <>
+                      <div className={errors.confirmPassword && touched.confirmPassword ? 'border-red-500 rounded' : ''}>
+                        <PasswordField 
+                          label="Confirm Password" 
+                          {...field}
+                        />
+                      </div>
+                      {errors.confirmPassword && touched.confirmPassword && (
+                        <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+                      )}
+                    </>
+                  );
                 }}
               </Field>
 
@@ -113,11 +239,55 @@ export default function SignUpPage() {
                 }}
               </Field>
 
+              {showVerification && (
+                <Field name="verificationToken">
+                  {({ field }: FieldProps) => {
+                    return (
+                      <div className="space-y-2">
+                        <Label htmlFor="verificationToken">
+                          Verification Code
+                        </Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            id="verificationToken"
+                            type="text"
+                            {...field}
+                            maxLength={6}
+                            required
+                            className={errors.verificationToken || verificationError ? 'border-red-500' : ''}
+                          />
+                          <Button
+                            variant="secondary"
+                            type="button"
+                            disabled={resendCooldown > 0}
+                            onClick={async () => {
+                              const verificationToken = await sendVerificationEmail(values.email);
+                              setVerificationToken(verificationToken);
+                              setResendCooldown(60);
+                            }}
+                          >
+                            {resendCooldown > 0
+                              ? `Resend (${resendCooldown}s)`
+                              : 'Resend code'}
+                          </Button>
+                        </div>
+                        {(errors.verificationToken || verificationError) && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {verificationError || errors.verificationToken}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  }}
+                </Field>
+              )}
+
               <Button
                 type="submit"
+                disabled={!values.agreeTerms}
                 className="w-full bg-[#415444] hover:bg-[#415444]/90"
               >
-                Create Account
+                {showVerification ? 'Create Account' : 'Verify Email'}
               </Button>
             </Form>
           );

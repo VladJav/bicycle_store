@@ -4,9 +4,11 @@ import CartSidebar from '@src/components/layout/CartSidebar';
 import CollectionCard from '@src/components/CollectionCard';
 import prisma from '@src/lib/prisma';
 import MainHeader from '@src/components/layout/MainHeader';
-
+import { auth } from '@src/lib/auth';
 export default async function Home() {
   const bicycles = await prisma.bicycle.findMany();
+  const session = await auth();
+  console.log(session);
 
   return (
     <div className="flex min-h-screen bg-[#fcfdfd]">
