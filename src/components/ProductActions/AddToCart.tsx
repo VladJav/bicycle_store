@@ -1,0 +1,22 @@
+'use client';
+
+import { ShoppingBagIcon } from 'lucide-react';
+
+import { Button } from '../ui/button';
+
+const AddToCart = () => {
+  const handleAddToCart = () => {
+        
+  };
+  return (
+    <Button
+      onClick={handleAddToCart}
+      className="flex-1 bg-[#415444] hover:bg-[#415444]/90"
+    >
+      <ShoppingBagIcon className="mr-2 h-5 w-5" />
+      Add to Cart
+    </Button>
+  );
+};
+
+export default AddToCart;

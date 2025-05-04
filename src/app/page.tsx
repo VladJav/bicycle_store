@@ -24,7 +24,15 @@ export default async function Home() {
 
         <div className="grid grid-cols-3 gap-6">
           {bicycles.map((item) => (
-            <CollectionCard key={item.id} {...item} />
+            <CollectionCard
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              price={item.price}
+              rating={item.rating}
+              colors={item.colors}
+              imageUrl={item.images[0]}
+            />
           ))}
         </div>
       </main>

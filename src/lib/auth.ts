@@ -20,6 +20,12 @@ export const config = {
       }
       return token;
     },
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
+      }
+      return session;
+    },
   },
   jwt: {
     encode: async function (params) {

@@ -7,15 +7,9 @@ import Image from 'next/image';
 import { Trash2 as TrashIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import Link from 'next/link';
+import type { Bicycle } from '@generated/prisma';
 
-interface Bicycle {
-  id: string;
-  title: string;
-  price: number;
-  rating: number;
-  imageUrl: string;
-  quantity?: number;
-}
+type CartItem = Bicycle & { quantity?: number; selectedColor?: string };
 
 const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
   const {
@@ -29,22 +23,14 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
 
   const cartItems = useMemo(() => {
     return items
-      .reduce<Bicycle[]>((acc, item) => {
-        const bicycle = bicycles.find((bicycle) => bicycle.id === item);
+      .reduce<CartItem[]>((acc, item) => {
+        const bicycle = bicycles.find((bicycle) => bicycle.id === item.id);
         if (bicycle) {
-          if (acc.find((b) => b.id === bicycle.id)) {
-            acc.map((b) => {
-              if (b.id === bicycle.id && b.quantity) {
-                b.quantity += 1;
-              }
-              return b;
-            });
-          } else {
-            acc.push({
-              ...bicycle,
-              quantity: 1,
-            });
-          }
+          acc.push({
+            ...bicycle,
+            selectedColor: item.color,
+            quantity: item.quantity,
+          });
         }
         return acc;
       }, [])
@@ -109,7 +95,7 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
               className="flex gap-6 bg-white rounded-3xl p-4 shadow-sm"
             >
               <Image
-                src={item.imageUrl || '/placeholder.svg'}
+                src={item.images[0] || '/placeholder.svg'}
                 alt={item.title}
                 width={100}
                 height={100}
@@ -119,7 +105,11 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
                 <div className="mb-4 flex items-start justify-between">
                   <div>
                     <h4 className="font-semibold text-lg">{item.title}</h4>
-                    {/* <p className="text-sm text-[#338838] mt-1">SIZE {item.size}</p> */}
+                    {item.selectedColor && (
+                      <p className="text-sm text-[#338838] mt-1">
+                        COLOR {item.selectedColor}
+                      </p>
+                    )}
                     <p className="font-semibold mt-2">$ {item.price}</p>
                   </div>
                   <Button
@@ -147,7 +137,13 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
                       variant="ghost"
                       size="icon"
                       className="text-gray-500 hover:text-gray-700"
-                      onClick={() => addToCart(item.id)}
+                      onClick={() =>
+                        addToCart({
+                          color: item.selectedColor || item.colors[0],
+                          id: item.id,
+                          quantity: 1,
+                        })
+                      }
                       aria-label={`Increase quantity of ${item.title}`}
                     >
                       +
@@ -173,7 +169,7 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
             <p>Total</p>
             <p>$ {totalCost.toFixed(2)}</p>
           </div>
-          <Button className="w-full bg-[#415444] hover:bg-[#415444]/90 rounded-2xl h-14 text-lg font-semibold mt-4">
+          <Button disabled={cartItems.length === 0} className="w-full bg-[#415444] hover:bg-[#415444]/90 rounded-2xl h-14 text-lg font-semibold mt-4">
             <Link href="/checkout">Checkout</Link>
           </Button>
         </div>

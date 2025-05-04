@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@src/components/ui/card';
 import { Button } from '@src/components/ui/button';
 import Image from 'next/image';
 import useCartStore from '@src/store/useCartStore'; 
+import Link from 'next/link';
 
 interface CollectionCardProps {
   id: string;
@@ -10,6 +11,7 @@ interface CollectionCardProps {
   price: number;
   rating: number;
   imageUrl: string;
+  colors: string[];
 }
 
 const CollectionCard = ({
@@ -17,12 +19,13 @@ const CollectionCard = ({
   title,
   price,
   rating,
+  colors,
   imageUrl,
 }: CollectionCardProps) => {
   const { addToCart, setIsOpen } = useCartStore();
 
   const handleAddToCart = () => {
-    addToCart(id);
+    addToCart({ id, color: colors[0], quantity: 1 });
     setIsOpen(true);
   };
 
@@ -34,7 +37,7 @@ const CollectionCard = ({
       <CardHeader className="p-0 relative">
         <div className="absolute inset-0 h-[295px] bg-black/40 opacity-0 -translate-y-2 transition-opacity group-hover:opacity-100 z-10" />
         <Button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 opacity-0 transform scale-95 transition-all group-hover:opacity-100 group-hover:scale-100 bg-white text-black hover:bg-white/90">
-          Quick View
+          <Link href={`/product/${id}`}>Quick View</Link>
         </Button>
         <Image
           src={imageUrl || '/placeholder.svg'}

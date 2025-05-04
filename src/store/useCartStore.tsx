@@ -1,10 +1,16 @@
 import { create } from 'zustand';
 
+interface CartItem {
+  id: string;
+  color: string;
+  quantity: number;
+}
+
 interface CartState {
   isOpen: boolean;
   toggleCart: () => void;
-  items: string[];
-  addToCart: (item: string) => void;
+  items: CartItem[];
+  addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
   removeOneItem: (id: string) => void;
   setIsOpen: (isOpen: boolean) => void;
@@ -15,13 +21,35 @@ const useCartStore = create<CartState>((set) => ({
   items: [],
   toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
   setIsOpen: (isOpen: boolean) => set({ isOpen }),
-  addToCart: (item) => set((state) => ({ items: [...state.items, item] })),
+  addToCart: (item) => set((state) => {
+    const existingItem = state.items.find((i) => i.id === item.id && i.color === item.color);
+    if (existingItem) {
+      return {
+        items: state.items.map((i) =>
+          i.id === item.id && i.color === item.color
+            ? { ...i, quantity: i.quantity + item.quantity }
+            : i
+        ),
+      };
+    }
+    return { items: [...state.items, item] };
+  }),
   removeFromCart: (id) =>
-    set((state) => ({ items: state.items.filter((item) => item !== id) })),
+    set((state) => ({ items: state.items.filter((item) => item.id !== id) })),
   removeOneItem: (id) =>
-    set((state) => ({
-      items: state.items.filter((_, index) => index !== state.items.indexOf(id)),
-    })),
+    set((state) => {
+      const item = state.items.find((i) => i.id === id);
+      if (!item) return state;
+      
+      if (item.quantity > 1) {
+        return {
+          items: state.items.map((i) =>
+            i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+          ),
+        };
+      }
+      return { items: state.items.filter((i) => i.id !== id) };
+    }),
 }));
 
 export default useCartStore;

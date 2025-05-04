@@ -11,21 +11,15 @@ import {
 import { Separator } from '@src/components/ui/separator';
 import useCartStore from '@src/store/useCartStore';
 import { useMemo } from 'react';
+import type { Bicycle } from '@generated/prisma';
 
-interface Bicycle {
-  id: string;
-  title: string;
-  price: number;
-  rating: number;
-  imageUrl: string;
-  quantity?: number;
-}
+type CartItem = Bicycle & { quantity?: number };
 
 const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
   const { items } = useCartStore();
   const cartItems = useMemo(() => {
     return items
-      .reduce<Bicycle[]>((acc, item) => {
+      .reduce<CartItem[]>((acc, item) => {
         const bicycle = bicycles.find((bicycle) => bicycle.id === item);
         if (bicycle) {
           if (acc.find((b) => b.id === bicycle.id)) {
@@ -81,7 +75,7 @@ const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
               <div key={item.id} className="flex gap-4">
                 <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border">
                   <Image
-                    src={item.imageUrl || '/placeholder.svg'}
+                    src={item.images[0] || '/placeholder.svg'}
                     alt={item.title}
                     width={80}
                     height={80}

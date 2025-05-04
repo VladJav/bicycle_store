@@ -1,0 +1,34 @@
+'use client';
+
+import { Minus, Plus } from 'lucide-react';
+import { useState } from 'react';
+
+const QuantityChanger = () => {
+  const [quantity, setQuantity] = useState(1);
+  const handleQuantityChange = (change: number) => {
+    if (quantity + change > 0) {
+      setQuantity(quantity + change);
+    }
+  };
+  return (
+    <div className="flex w-32 items-center rounded-full border border-gray-200">
+      <button
+        onClick={() => handleQuantityChange(-1)}
+        className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+        aria-label="Decrease quantity"
+      >
+        <Minus className="h-4 w-4" />
+      </button>
+      <span className="flex-1 text-center">{quantity}</span>
+      <button
+        onClick={() => handleQuantityChange(1)}
+        className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+        aria-label="Increase quantity"
+      >
+        <Plus className="h-4 w-4" />
+      </button>
+    </div>
+  );
+};
+
+export default QuantityChanger;

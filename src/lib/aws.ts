@@ -7,3 +7,4 @@ AWS.config.update({
 });
 
 export const SES = new AWS.SES();
+export const S3 = new AWS.S3();
