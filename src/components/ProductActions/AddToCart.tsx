@@ -4,10 +4,11 @@ import { ShoppingBagIcon } from 'lucide-react';
 
 import { Button } from '../ui/button';
 
-const AddToCart = () => {
-  const handleAddToCart = () => {
-        
-  };
+interface AddToCartProps {
+  handleAddToCart: () => void;
+}
+
+const AddToCart = ({ handleAddToCart }: AddToCartProps) => {
   return (
     <Button
       onClick={handleAddToCart}

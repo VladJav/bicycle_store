@@ -1,8 +1,11 @@
 'use client';
-import { useState } from 'react';
+interface ColorSelectProps {
+  colors: string[];
+  setSelectedColor: (color: string) => void;
+  selectedColor: string;
+}
 
-const ColorSelect = ({ colors }: { colors: string[] }) => {
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
+const ColorSelect = ({ colors, setSelectedColor, selectedColor }: ColorSelectProps) => {
   return (
     <div className="flex space-x-3">
       {colors.map((color: string) => (

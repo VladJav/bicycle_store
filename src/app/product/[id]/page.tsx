@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { Star, User } from 'lucide-react';
+import { Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -13,7 +13,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@src/components/ui/tabs';
-import { Bell, Search, ShoppingBagIcon } from 'lucide-react';
+import { Bell, Search } from 'lucide-react';
 import { Input } from '@src/components/ui/input';
 import ReviewForm from '@src/components/ReviewForm/ReviewForm';
 import Review from '@src/components/Review/Review';
@@ -25,9 +25,12 @@ import {
 } from '@src/components/ProductActions';
 import QuantityChanger from '@src/components/ProductActions/QuantityChanger';
 import ColorSelect from '@src/components/ProductActions/ColorSelect';
-import prisma from '@src/lib/prisma';
 import { auth } from '@src/lib/auth';
 import { getBicycle } from '@src/actions/bicycle';
+import CartButton from '@src/components/CartButton/CartButton';
+import CartSidebar from '@src/components/layout/CartSidebar/CartSidebar';
+import prisma from '@src/lib/prisma';
+import ProductConfiguration from '@src/components/ProductConfiguration/ProductConfiguration';
 
 export default async function ProductPage({
   params,
@@ -35,6 +38,7 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
 }) {
   const productId = (await params).id;
+  const bicycles = await prisma.bicycle.findMany();
   const product = await getBicycle(productId);
   const session = await auth();
 
@@ -94,27 +98,24 @@ export default async function ProductPage({
             <Button size="icon" variant="ghost">
               <Bell className="h-5 w-5" />
             </Button>
-            <Button size="icon" variant="ghost" className="relative">
-              <ShoppingBagIcon className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#415444] text-xs text-white">
-                2
-              </span>
-            </Button>
-            { session && session.user ? (
+            <CartButton />
+            {session && session.user ? (
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={session.user.image || ''}
                     alt={session.user.name || ''}
                   />
-                  <AvatarFallback>{session.user.name?.charAt(0) || ''}</AvatarFallback>
+                  <AvatarFallback>
+                    {session.user.name?.charAt(0) || ''}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="hidden md:block">
                   <p className="text-sm font-medium">{session.user.name}</p>
                 </div>
               </div>
             ) : (
-              <Button variant="outline" >
+              <Button variant="outline">
                 <Link href="/auth/sign-in">Sign in</Link>
               </Button>
             )}
@@ -138,7 +139,7 @@ export default async function ProductPage({
                     <Star
                       key={i}
                       className={`h-5 w-5 ${
-                        i < Math.floor(product.rating)
+                        i < Math.floor(Number(product.rating))
                           ? 'fill-yellow-400 text-yellow-400'
                           : 'text-gray-300'
                       }`}
@@ -157,26 +158,12 @@ export default async function ProductPage({
 
             <p className="text-gray-600">{product.description}</p>
 
-            <div className="space-y-4">
-              <div>
-                <h3 className="mb-2 font-medium">Color</h3>
-                <ColorSelect colors={product.colors} />
-              </div>
-
-              <div>
-                <h3 className="mb-2 font-medium">Quantity</h3>
-                <QuantityChanger />
-              </div>
-            </div>
-
-            <div className="flex space-x-4">
-              <AddToCart />
-              <AddToWishlist />
-              <ShareProduct
-                name={product.title}
-                description={product.description || ''}
-              />
-            </div>
+            <ProductConfiguration 
+              colors={product.colors}
+              title={product.title}
+              description={product.description || ''}
+              id={product.id}
+            />
 
             <Separator />
 
@@ -191,7 +178,7 @@ export default async function ProductPage({
           </div>
         </div>
 
-        {/* Product Tabs */}
+        <ReviewForm />
         <div className="mt-16">
           <Tabs defaultValue="reviews">
             <TabsList className="grid w-full grid-cols-1 bg-[#e0e5ce]">
@@ -209,7 +196,12 @@ export default async function ProductPage({
                 <div className="space-y-6">
                   {productReviews.length > 0 ? (
                     productReviews.map((review) => (
-                      <Review key={review.id} {...review} user={session?.user} date={review.createdAt.toISOString()} />
+                      <Review
+                        key={review.id}
+                        {...review}
+                        user={session?.user}
+                        date={review.createdAt.toISOString()}
+                      />
                     ))
                   ) : (
                     <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center">
@@ -221,13 +213,12 @@ export default async function ProductPage({
                   )}
                 </div>
 
-                {/* Write a Review */}
-                <ReviewForm />
               </div>
             </TabsContent>
           </Tabs>
         </div>
       </div>
+      <CartSidebar bicycles={bicycles} />
     </div>
   );
 }

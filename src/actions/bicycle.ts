@@ -1,8 +1,14 @@
 'use server';
 
 import prisma from '@src/lib/prisma';
+import { Review, Bicycle } from '@generated/prisma';
 
-export async function getBicycle(id: string) {
+interface BicycleWithReviews extends Bicycle {
+  reviews: Review[];
+  rating: string;
+}
+
+export async function getBicycle(id: string): Promise<BicycleWithReviews> {
   const bicycle = await prisma.bicycle.findUniqueOrThrow({
     where: { id },
     include: {

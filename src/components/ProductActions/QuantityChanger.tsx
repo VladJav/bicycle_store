@@ -1,10 +1,12 @@
 'use client';
 
 import { Minus, Plus } from 'lucide-react';
-import { useState } from 'react';
+interface QuantityChangerProps {
+  quantity: number;
+  setQuantity: (quantity: number) => void;
+}
 
-const QuantityChanger = () => {
-  const [quantity, setQuantity] = useState(1);
+const QuantityChanger = ({ quantity, setQuantity }: QuantityChangerProps) => {
   const handleQuantityChange = (change: number) => {
     if (quantity + change > 0) {
       setQuantity(quantity + change);
