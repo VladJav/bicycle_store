@@ -30,6 +30,7 @@ export function Product({ product }: ProductProps) {
           height="64"
           src={product.images[0]}
           width="64"
+          unoptimized={true}
         />
       </TableCell>
       <TableCell className="font-medium">{product.title}</TableCell>

@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/components/ui/tabs';
 import { ProductsTable } from './products-table';
 import { CreateProductModal } from '@src/components/CreateProductModal/CreateProductModal';
-import prisma from '@src/lib/prisma';
+import { getAllBicycles } from '@src/actions/bicycle';
 
 export default async function ProductsPage(
   props: {
@@ -11,7 +11,7 @@ export default async function ProductsPage(
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
   const offset = searchParams.offset ?? 0;
-  const products = await prisma.bicycle.findMany({
+  const products = await getAllBicycles({
     where: {
       title: {
         contains: search,

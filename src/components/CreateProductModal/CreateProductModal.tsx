@@ -8,7 +8,7 @@ import { PlusCircle, X, Upload } from 'lucide-react';
 import Image from 'next/image';
 import { Formik, Form, Field, FieldProps, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-
+import { createBicycle } from '@src/actions/bicycle';
 interface ProductFormValues {
   title: string;
   description: string;
@@ -46,7 +46,7 @@ export function CreateProductModal() {
   const [newColor, setNewColor] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit = (
+  const handleSubmit = async (
     values: ProductFormValues,
     { resetForm }: FormikHelpers<ProductFormValues>
   ) => {
@@ -54,8 +54,7 @@ export function CreateProductModal() {
       ...values,
       price: parseFloat(values.price),
     };
-    // TODO: Implement product creation
-    console.log(data);
+    await createBicycle(data);
     setOpen(false);
     resetForm();
   };

@@ -68,9 +68,9 @@ const bicycleData = [
 ];
 
 export async function main() {
-  for (const bicycle of bicycleData) {
-    await prisma.bicycle.create({ data: bicycle });
-  }
+  // for (const bicycle of bicycleData) {
+  //   await prisma.bicycle.create({ data: bicycle });
+  // }
 }
 
 main();
