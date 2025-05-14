@@ -72,7 +72,7 @@ function DesktopNav() {
           <Package className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="/customers" label="Customers">
+        <NavItem href="/dashboard/customers" label="Customers">
           <Users2 className="h-5 w-5" />
         </NavItem>
 

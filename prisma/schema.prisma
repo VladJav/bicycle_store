@@ -29,10 +29,7 @@ model User {
   password         String?
 
   phone            String?
-  addresses        Address[]
-  defaultAddressId String?   @unique
-  defaultAddress   Address?  @relation("DefaultAddress", fields: [defaultAddressId], references: [id]) // Optional relation
-  
+  orders           Order[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -88,29 +85,36 @@ model Bicycle {
   features    String[]
   colors      String[]
 
-  orders      Order[]
   reviews     Review[]
+  orderItems  OrderItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Order {
   id          String   @id @default(uuid())
-  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id])
-  bicycleId   String
+
+  userId      String
+  statusId    String
+  
+  address     String
+
   createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+  status      Status   @relation(fields: [statusId], references: [id])
+  orderItems  OrderItem[]
 }
 
-model Address {
-  id             String   @id @default(uuid())
-  address        String
-  city           String
-  postalCode     String
-  country        String
-  userId         String
-  user           User     @relation(fields: [userId], references: [id])
-  defaultForUser User?    @relation("DefaultAddress")
-  createdAt      DateTime @default(now())
+model OrderItem {
+  id          String   @id @default(uuid())
+  orderId     String
+  bicycleId   String
+  quantity    Int
+
+  createdAt   DateTime @default(now()) 
+  order       Order    @relation(fields: [orderId], references: [id])
+  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id])
 }
 
 model Review {
@@ -124,4 +128,10 @@ model Review {
   bicycleId   String
   bicycle     Bicycle  @relation(fields: [bicycleId], references: [id])
   createdAt   DateTime @default(now())
+}
+
+model Status {
+  id          String   @id @default(uuid())
+  title       String
+  orders      Order[]
 }

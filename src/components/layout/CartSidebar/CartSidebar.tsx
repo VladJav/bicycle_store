@@ -8,10 +8,12 @@ import { Trash2 as TrashIcon } from 'lucide-react';
 import { useMemo } from 'react';
 import Link from 'next/link';
 import type { Bicycle } from '@generated/prisma';
+import { useSession } from 'next-auth/react';
 
 type CartItem = Bicycle & { quantity?: number; selectedColor?: string };
 
 const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
+  const { data: session, status } = useSession();
   const {
     isOpen,
     toggleCart,
@@ -43,6 +45,45 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
       0
     );
   }, [cartItems]);
+
+  if (status === 'unauthenticated') {
+    return (
+      <>
+        <div
+          className={cn(
+            'fixed inset-0 bg-black/50 z-40 transition-opacity duration-300',
+            isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          )}
+          onClick={toggleCart}
+        />
+
+        <aside
+          className={cn(
+            'fixed right-0 top-0 bottom-0 z-50 w-96 border-l px-8 py-8 flex flex-col transition-all duration-300 ease-in-out',
+            'bg-white h-screen overflow-hidden justify-center',
+            isOpen ? 'translate-x-0' : 'translate-x-full'
+          )}
+        >
+          <div className='flex flex-col gap-6 p-4 text-center'>
+            <div className='space-y-2'>
+              <h3 className='text-2xl font-semibold'>Sign in to continue</h3>
+              <p className='text-muted-foreground'>
+                You need to be signed in to view your cart and make purchases
+              </p>
+            </div>
+            <div className='flex flex-col gap-4'>
+              <Button asChild variant='default' className='w-full'>
+                <Link href='/sign-in'>Sign In</Link>
+              </Button>
+              <Button asChild variant='outline' className='w-full'>
+                <Link href='/sign-up'>Sign Up</Link>
+              </Button>
+            </div>
+          </div>
+        </aside>
+      </>
+    );
+  }
 
   return (
     <>

@@ -19,7 +19,7 @@ export default async function ProductsPage(
     },
     include: {
       reviews: true,
-      orders: true,
+      orderItems: true,
     },
   });
   const newOffset = Number(offset) + products.length;

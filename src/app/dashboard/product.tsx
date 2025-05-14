@@ -1,22 +1,12 @@
 import Image from 'next/image';
-import { Badge } from '@src/components/ui/badge';
-import { Button } from '@src/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@src/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@src/components/ui/table';
-import { deleteProduct } from './actions';
-import { Bicycle, Review, Order } from '@generated/prisma';
+import { Bicycle, Review, OrderItem } from '@generated/prisma';
+import { ProductActions } from '@src/components/ProductActions/ProductActions';
 
 interface ProductProps {
   product: Bicycle & {
     reviews: Review[];
-    orders: Order[];
+    orderItems: OrderItem[];
   };
 }
 
@@ -37,29 +27,13 @@ export function Product({ product }: ProductProps) {
       <TableCell>{product.reviews.length}</TableCell>
       <TableCell className="hidden md:table-cell">{`$${product.price}`}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {product.orders.length}
+        {product.orderItems.length}
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {product.createdAt.toLocaleDateString('en-US')}
       </TableCell>
       <TableCell>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>
-              <form action={deleteProduct}>
-                <button type="submit">Delete</button>
-              </form>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <ProductActions product={product} />
       </TableCell>
     </TableRow>
   );

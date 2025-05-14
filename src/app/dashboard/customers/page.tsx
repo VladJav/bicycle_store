@@ -1,19 +1,15 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from '@src/components/ui/card';
+import { getUsers } from '@src/actions/user';
+import { CustomersTable } from '../customers-table';
 
-export default function CustomersPage() {
+export default async function CustomersPage({
+  searchParams
+}: {
+  searchParams: { offset?: string };
+}) {
+  const offset = Number(searchParams.offset) || 5;
+  const { users, total } = await getUsers(offset);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Customers</CardTitle>
-        <CardDescription>View all customers and their orders.</CardDescription>
-      </CardHeader>
-      <CardContent></CardContent>
-    </Card>
+    <CustomersTable customers={users} offset={offset} totalCustomers={total} />
   );
 }
