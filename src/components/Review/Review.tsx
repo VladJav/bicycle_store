@@ -2,13 +2,10 @@ import { Card, CardContent } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Star } from 'lucide-react';
 import { Button } from '../ui/button';
-
+import { User } from '@generated/prisma';
 interface ReviewProps {
   id: string;
-  user: {
-    name: string;
-    image: string;
-  };
+  user: User;
   rating: number;
   title: string;
   comment: string;

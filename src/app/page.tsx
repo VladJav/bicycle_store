@@ -5,10 +5,11 @@ import CollectionCard from '@src/components/CollectionCard';
 import prisma from '@src/lib/prisma';
 import MainHeader from '@src/components/layout/MainHeader';
 import { auth } from '@src/lib/auth';
+import Link from 'next/link';
+
 export default async function Home() {
   const bicycles = await prisma.bicycle.findMany();
   const session = await auth();
-  console.log(session);
 
   return (
     <div className="flex min-h-screen bg-[#fcfdfd]">
@@ -19,7 +20,7 @@ export default async function Home() {
         <MainHeader />
         <div className="mb-8 flex items-center justify-between">
           <h3 className="text-2xl font-semibold">Popular Collection</h3>
-          <Button variant="link">See All</Button>
+          <Button variant="link"><Link href="/product">See All</Link></Button>
         </div>
 
         <div className="grid grid-cols-3 gap-6">

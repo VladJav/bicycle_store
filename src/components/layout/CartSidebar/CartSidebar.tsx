@@ -13,7 +13,7 @@ import { useSession } from 'next-auth/react';
 type CartItem = Bicycle & { quantity?: number; selectedColor?: string };
 
 const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const {
     isOpen,
     toggleCart,
@@ -73,10 +73,10 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
             </div>
             <div className='flex flex-col gap-4'>
               <Button asChild variant='default' className='w-full'>
-                <Link href='/sign-in'>Sign In</Link>
+                <Link href='/auth/sign-in'>Sign In</Link>
               </Button>
               <Button asChild variant='outline' className='w-full'>
-                <Link href='/sign-up'>Sign Up</Link>
+                <Link href='/auth/sign-up'>Sign Up</Link>
               </Button>
             </div>
           </div>
