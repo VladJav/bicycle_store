@@ -9,26 +9,35 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@src/components/ui/breadcrumb';
+import { usePathname } from 'next/navigation';
+import React from 'react';
 
 export function DashboardBreadcrumb() {
+  const pathname = usePathname();
+  const pathList = pathname.split('/').slice(1);
+
   return (
     <Breadcrumb className="hidden md:flex">
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="#">Dashboard</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="#">Products</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>All Products</BreadcrumbPage>
-        </BreadcrumbItem>
+        {pathList.map((path, index) => {
+          if (index === pathList.length - 1) {
+            return (
+              <BreadcrumbItem key={path}>
+                <BreadcrumbPage>{path.charAt(0).toUpperCase() + path.slice(1)}</BreadcrumbPage>
+              </BreadcrumbItem>
+            );
+          }
+          return (
+            <React.Fragment key={path}>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href={'/dashboard'}>{path.charAt(0).toUpperCase() + path.slice(1)}</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+            </React.Fragment>
+          );
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   );

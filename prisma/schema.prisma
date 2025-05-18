@@ -96,6 +96,7 @@ model Order {
 
   userId      String
   statusId    String
+  stripeIntentId  String
   
   address     String
 
@@ -132,6 +133,6 @@ model Review {
 
 model Status {
   id          String   @id @default(uuid())
-  title       String
+  title       String   @unique
   orders      Order[]
 }

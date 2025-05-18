@@ -64,8 +64,10 @@ function CustomTooltip({ children, tooltip, isDisabled }: any) {
   }
   return (
     <Tooltip>
-      <TooltipTrigger>
-        {children}
+      <TooltipTrigger asChild>
+        <div>
+          {children}
+        </div>
       </TooltipTrigger>
       <TooltipContent>
         {tooltip}

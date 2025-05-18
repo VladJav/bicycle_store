@@ -15,13 +15,6 @@ const MainHeader = () => {
         <p className="text-gray-500">Welcome Back</p>
       </div>
       <div className="flex items-center gap-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <Input className="w-64 pl-10" placeholder="Search destination" />
-        </div>
-        <Button size="icon" variant="ghost">
-          <Bell className="h-5 w-5" />
-        </Button>
         <CartButton />
         <Avatar className="w-10 h-10">
           <AvatarImage

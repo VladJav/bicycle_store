@@ -13,28 +13,20 @@ import useCartStore from '@src/store/useCartStore';
 import { useMemo } from 'react';
 import type { Bicycle } from '@generated/prisma';
 
-type CartItem = Bicycle & { quantity?: number };
+type CartItem = Bicycle & { quantity?: number; selectedColor?: string };
 
 const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
   const { items } = useCartStore();
   const cartItems = useMemo(() => {
     return items
       .reduce<CartItem[]>((acc, item) => {
-        const bicycle = bicycles.find((bicycle) => bicycle.id === item);
+        const bicycle = bicycles.find((bicycle) => bicycle.id === item.id);
         if (bicycle) {
-          if (acc.find((b) => b.id === bicycle.id)) {
-            acc.map((b) => {
-              if (b.id === bicycle.id && b.quantity) {
-                b.quantity += 1;
-              }
-              return b;
-            });
-          } else {
-            acc.push({
-              ...bicycle,
-              quantity: 1,
-            });
-          }
+          acc.push({
+            ...bicycle,
+            selectedColor: item.color,
+            quantity: item.quantity,
+          });
         }
         return acc;
       }, [])
@@ -88,7 +80,11 @@ const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
                     <p className="ml-4">${item.price.toFixed(2)}</p>
                   </div>
                   <div className="flex items-end justify-between text-sm">
-                    <p className="text-gray-500">Qty {item.quantity}</p>
+                    <p className="text-gray-500">Quality {item.quantity}</p>
+                    <p className="ml-4">${(item.quantity || 0) * item.price}</p>
+                  </div>
+                  <div className="flex items-end justify-between text-sm">
+                    <p className="text-gray-500">Color {item.selectedColor}</p>
                   </div>
                 </div>
               </div>

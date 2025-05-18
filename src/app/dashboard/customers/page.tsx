@@ -6,7 +6,8 @@ export default async function CustomersPage({
 }: {
   searchParams: { offset?: string };
 }) {
-  const offset = Number(searchParams.offset) || 5;
+  const { offset: offsetParam } = await searchParams;
+  const offset = Number(offsetParam) || 5;
   const { users, total } = await getUsers(offset);
 
   return (

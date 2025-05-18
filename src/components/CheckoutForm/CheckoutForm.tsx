@@ -9,8 +9,13 @@ import { DeliveryDetails, ShippingDetails } from '@src/types/Checkout';
 import ShippingScheme from '@src/lib/validations/ShippingValidation';
 import { CustomTooltip } from '@src/components/ui/tooltip';
 import { CheckoutTabs } from '@src/constants/core';
+import { Bicycle } from '@generated/prisma';
 
-const CheckoutForm = () => {
+interface CheckoutFormProps {
+  bicycles: Bicycle[];
+}
+
+const CheckoutForm = ({ bicycles }: CheckoutFormProps) => {
   const [activeTab, setActiveTab] = useState<CheckoutTabs>(
     CheckoutTabs.Shipping
   );
@@ -103,9 +108,10 @@ const CheckoutForm = () => {
 
         {/* Payment Information */}
         <PaymentInformation
-          shippingDetails={shippingDetails}
-          setShippingDetails={setShippingDetails}
           handleTabChange={handleTabChange}
+          bicycles={bicycles}
+          shippingDetails={shippingDetails}
+          selectedShipping={selectedShipping}
         />
       </Tabs>
     </div>

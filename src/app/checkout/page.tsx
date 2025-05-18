@@ -29,7 +29,7 @@ export default async function CheckoutPage() {
         <div className="grid gap-8 md:grid-cols-3">
           <OrderSummary bicycles={bicycles} />
 
-          <CheckoutFormComponent />
+          <CheckoutFormComponent bicycles={bicycles} />
         </div>
       </div>
     </div>

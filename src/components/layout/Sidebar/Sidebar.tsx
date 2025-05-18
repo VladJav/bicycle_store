@@ -4,7 +4,6 @@ import {
   HomeIcon,
   User2,
   Settings,
-  Mail,
   ShoppingBag,
   LogOut,
 } from 'lucide-react';
@@ -30,6 +29,13 @@ const Sidebar = () => {
           Dashboard
         </Link>
         <Link
+          href="#"
+          className="flex items-center gap-3 px-3 py-2 text-gray-500 transition-colors hover:text-gray-900"
+        >
+          <ShoppingBag className="h-5 w-5" />
+          My Cart
+        </Link>
+        <Link
           href="/profile"
           className="flex items-center gap-3 px-3 py-2 text-gray-500 transition-colors hover:text-gray-900"
         >
@@ -42,27 +48,6 @@ const Sidebar = () => {
         >
           <Settings className="h-5 w-5" />
           Settings
-        </Link>
-        <Link
-          href="#"
-          className="flex items-center gap-3 px-3 py-2 text-gray-500 transition-colors hover:text-gray-900"
-        >
-          <Mail className="h-5 w-5" />
-          Message
-        </Link>
-        <Link
-          href="#"
-          className="flex items-center gap-3 px-3 py-2 text-gray-500 transition-colors hover:text-gray-900"
-        >
-          <ShoppingBag className="h-5 w-5" />
-          My Cart
-        </Link>
-        <Link
-          href="#"
-          className="flex items-center gap-3 px-3 py-2 text-gray-500 transition-colors hover:text-gray-900"
-        >
-          <User2 className="h-5 w-5" />
-          Support
         </Link>
         <Link
           href="#"

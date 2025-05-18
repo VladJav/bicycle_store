@@ -103,8 +103,15 @@ export default async function ProductPage({
           </div>
         </div>
 
-        {session && <ReviewForm />}
-        <div className="mt-16">
+        {session ? (
+          <ReviewForm />
+        ) : (
+          <div className='mt-8 rounded-lg border border-dashed border-gray-300 p-8 text-center'>
+            <h3 className='text-lg font-medium'>Want to leave a review?</h3>
+            <p className='mt-2 text-gray-600'>Please sign in to share your experience with this product</p>
+          </div>
+        )}
+        <div className='mt-16'>
           <Tabs defaultValue="reviews">
             <TabsList className="grid w-full grid-cols-1 bg-[#e0e5ce]">
               <TabsTrigger value="reviews">
