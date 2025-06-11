@@ -58,6 +58,7 @@ function TooltipContent({
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CustomTooltip({ children, tooltip, isDisabled }: any) {
   if (isDisabled) {
     return children;

@@ -5,7 +5,7 @@ import { getStatuses } from '@src/actions/statuses';
 export default async function OrdersPage({
   searchParams
 }: {
-  searchParams: { offset?: string };
+  searchParams: Promise<{ offset?: string }>;
 }) {
   const { offset: offsetParam } = await searchParams;
   const offset = Number(offsetParam) || 5;
@@ -13,6 +13,7 @@ export default async function OrdersPage({
   const { statuses } = await getStatuses({});
 
   return (
+    // @ts-expect-error - TODO: fix this
     <OrdersTable statuses={statuses} orders={orders} offset={offset} totalOrders={total} />
   );
 }

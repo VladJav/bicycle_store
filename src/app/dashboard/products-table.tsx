@@ -25,6 +25,7 @@ export function ProductsTable({
   offset,
   totalProducts
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   products: any[];
   offset: number;
   totalProducts: number;

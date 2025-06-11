@@ -4,7 +4,7 @@ import { StatusesTable } from '../statuses-table';
 export default async function StatusesPage({
   searchParams
 }: {
-  searchParams: { offset?: string };
+  searchParams: Promise<{ offset?: string }>;
 }) {
   const { offset } = await searchParams;
   const { statuses, total } = await getStatuses({

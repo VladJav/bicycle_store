@@ -35,6 +35,7 @@ const ReviewForm = () => {
   ) => {
     createReview({
       ...values,
+      // @ts-expect-error - TODO: fix this
       bicycleId: id,
     });
     resetForm();

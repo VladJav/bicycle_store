@@ -27,9 +27,9 @@ const Review = ({
         <div className="flex items-start justify-between">
           <div className="flex items-center">
             <Avatar className="h-10 w-10">
-              <AvatarImage src={user.image || ''} alt={user.name} />
+              <AvatarImage src={user.image || ''} alt={user.name || ''} />
               <AvatarFallback>
-                {user.name
+                {user.name || ''
                   .split(' ')
                   .map((n) => n[0])
                   .join('')}

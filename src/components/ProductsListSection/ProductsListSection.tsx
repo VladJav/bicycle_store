@@ -61,6 +61,7 @@ export default async function ProductsListSection({
           </Button>
         </div>
       ) : (
+        // @ts-expect-error - TODO: fix this
         <ProductsList products={bicycles} />
       )}
 

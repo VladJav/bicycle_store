@@ -70,6 +70,7 @@ export async function getAllBicycles(params: Params): Promise<Array<BicycleWithR
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getBicyclesCount(params: any) {
   const count = await prisma.bicycle.count(params);
   return count;

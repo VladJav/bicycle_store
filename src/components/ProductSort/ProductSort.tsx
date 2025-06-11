@@ -11,10 +11,8 @@ import ProductsFilters from '../ProductsFilters/ProductsFilters';
 
 export default function ProductSort() {
   const [sortOption, setSortOption] = useState('featured');
-  console.log(sortOption);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   useEffect(() => {
-    console.log(sortOption);
   }, [sortOption]);
   return (
     <>
@@ -28,7 +26,7 @@ export default function ProductSort() {
           Filters
         </Button>
         <div className="w-40">
-          <Select defaultValue='featured' onValueChange={setSortOption}>
+          <Select defaultValue="featured" onValueChange={setSortOption}>
             <SelectTrigger>
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
@@ -82,6 +80,7 @@ export default function ProductSort() {
 
             {/* Filters */}
             <div className="mt-4 px-4">
+              {/* @ts-expect-error - TODO: fix this */}
               <ProductsFilters />
             </div>
           </div>

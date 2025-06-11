@@ -6,14 +6,8 @@ import {
   Dialog,
   DialogHeader,
   DialogContent,
-  DialogTrigger,
   DialogTitle,
 } from '../ui/dialog';
-import {
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
 import { Bicycle } from '@generated/prisma';
 import { Formik, Form, Field, ErrorMessage, FieldProps } from 'formik';
 import { Input } from '../ui/input';
@@ -222,7 +216,11 @@ const DropdownEditAction = ({
                     {values.images.map((image, index) => (
                       <div key={index} className="relative aspect-square group">
                         <Image
-                          src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                          src={
+                            typeof image === 'string'
+                              ? image
+                              : URL.createObjectURL(image)
+                          }
                           alt={`Product image ${index + 1}`}
                           fill
                           className="object-cover rounded-lg"

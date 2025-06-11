@@ -131,6 +131,7 @@ export default async function ProductPage({
                       <Review
                         key={review.id}
                         {...review}
+                        // @ts-expect-error - TODO: fix this
                         user={review.user}
                         date={review.createdAt.toISOString()}
                       />

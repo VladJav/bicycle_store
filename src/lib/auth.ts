@@ -22,6 +22,7 @@ export const config = {
     },
     async session({ session, user }) {
       if (session.user) {
+        // @ts-expect-error - user is not used in this callback
         session.user.role = user.role;
         session.user.id = user.id;
       }

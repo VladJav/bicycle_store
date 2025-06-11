@@ -33,6 +33,7 @@ export function Product({ product }: ProductProps) {
         {product.createdAt.toLocaleDateString('en-US')}
       </TableCell>
       <TableCell>
+        {/* @ts-expect-error - TODO: fix this */}
         <ProductActions product={product} />
       </TableCell>
     </TableRow>

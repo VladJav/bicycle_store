@@ -10,7 +10,7 @@ import CartSidebar from '@src/components/layout/CartSidebar';
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: { page: string; price: string; colors: string; sort: string };
+  searchParams: Promise<{ page: string; price: string; colors: string; sort: string }>;
 }) {
   const {
     page = '1',

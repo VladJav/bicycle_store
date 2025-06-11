@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 export default function Error({
   error,
-  reset
+  reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
@@ -37,6 +37,7 @@ export default function Error({
         <p>Insert a row for testing:</p>
         <pre className="my-4 px-3 py-4 bg-black text-white rounded-lg max-w-2xl overflow-scroll flex text-wrap">
           <code>
+            {/* eslint-disable-next-line */}
             {`INSERT INTO users (id, email, name, username) VALUES (1, 'me@site.com', 'Me', 'username');`}
           </code>
         </pre>
