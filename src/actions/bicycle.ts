@@ -100,11 +100,7 @@ export async function createBicycle(data: CreateBicycleData) {
 
 export async function deleteBicycle(id: string) {
   await prisma.bicycle.delete({
-    where: { id },
-    include: {
-      reviews: true,
-      orderItems: true,
-    },
+    where: { id }
   });
   revalidatePath('/dashboard');
 }

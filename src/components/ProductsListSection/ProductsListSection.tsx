@@ -4,7 +4,7 @@ import { Button } from '@src/components/ui/button';
 import ProductsList from '@src/components/ProductsList/ProductsList';
 import { getAllBicycles, getBicyclesCount } from '@src/actions/bicycle';
 
-const BICYCLES_PER_PAGE = 12;
+const BICYCLES_PER_PAGE = 10;
 
 export default async function ProductsListSection({
   page = '1',
@@ -33,8 +33,8 @@ export default async function ProductsListSection({
       } : undefined,
     },
     orderBy: {
-      ...(sort === 'price-low-high' && { price: 'desc' }),
-      ...(sort === 'price-high-low' && { price: 'asc' }),
+      ...(sort === 'price-low-high' && { price: 'asc' }),
+      ...(sort === 'price-high-low' && { price: 'desc' }),
       ...(sort === 'rating' && { rating: 'desc' }),
       ...(sort === 'newest' && { createdAt: 'desc' }),
     },

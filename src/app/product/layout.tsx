@@ -25,25 +25,19 @@ export default async function ProductLayout({
           <div className="flex items-center">
             <Link href="/" className="mr-8">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/fs-OQzXWiKsdo0mSCzNZyZmZHXxrCi0Bp.png"
+                src="/images/generated-image (1).png"
                 alt="Fashion Store"
                 width={150}
                 height={40}
-                className="h-10 w-auto"
+                className="h-12 w-auto"
               />
             </Link>
             <nav className="hidden space-x-6 md:flex">
               <Link href="/" className="text-gray-500 hover:text-gray-900">
                 Home
               </Link>
-              <Link href="/" className="text-gray-500 hover:text-gray-900">
+              <Link href="/product" className="text-gray-500 hover:text-gray-900">
                 Shop
-              </Link>
-              <Link href="/" className="text-gray-500 hover:text-gray-900">
-                Collections
-              </Link>
-              <Link href="/" className="text-gray-500 hover:text-gray-900">
-                About
               </Link>
             </nav>
           </div>
@@ -52,9 +46,6 @@ export default async function ProductLayout({
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input className="w-64 pl-10" placeholder="Search products" />
             </div>
-            <Button size="icon" variant="ghost">
-              <Bell className="h-5 w-5" />
-            </Button>
             <CartButton />
             {session && session.user ? (
               <div className="flex items-center gap-2">

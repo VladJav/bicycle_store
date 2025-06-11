@@ -14,25 +14,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
 
 model User {
   id               String    @id @default(cuid())
   name             String?
   email            String    @unique
   emailVerified    DateTime?
-
+  role             UserRole  @default(USER)
   image            String?
   accounts         Account[]
   sessions         Session[]
   reviews          Review[]
-
   password         String?
-
   phone            String?
   orders           Order[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
  
 model Account {
@@ -115,7 +116,7 @@ model OrderItem {
 
   createdAt   DateTime @default(now()) 
   order       Order    @relation(fields: [orderId], references: [id])
-  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id])
+  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -127,7 +128,7 @@ model Review {
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   bicycleId   String
-  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id])
+  bicycle     Bicycle  @relation(fields: [bicycleId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
 }
 

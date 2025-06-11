@@ -9,7 +9,7 @@ interface CollectionCardProps {
   id: string;
   title: string;
   price: number;
-  rating: number;
+  rating: string;
   imageUrl: string;
   colors: string[];
 }
@@ -56,7 +56,7 @@ const CollectionCard = ({
                 <svg
                   key={i}
                   className={`w-4 h-4 ${
-                    i < Math.floor(rating) ? 'text-yellow-400' : 'text-gray-300'
+                    i < Number(rating) ? 'text-yellow-400' : 'text-gray-300'
                   }`}
                   fill="currentColor"
                   viewBox="0 0 20 20"

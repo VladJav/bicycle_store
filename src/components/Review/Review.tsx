@@ -63,14 +63,6 @@ const Review = ({
           <h5 className="font-medium">{title}</h5>
           <p className="mt-1 text-gray-600">{comment}</p>
         </div>
-        <div className="mt-4 flex items-center justify-between">
-          <Button variant="ghost" size="sm" className="text-sm text-gray-500">
-            Was this helpful? ({helpful})
-          </Button>
-          <Button variant="ghost" size="sm" className="text-sm text-gray-500">
-            Report
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );
