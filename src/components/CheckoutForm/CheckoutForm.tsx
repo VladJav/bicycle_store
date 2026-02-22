@@ -13,22 +13,41 @@ import { Bicycle } from '@generated/prisma';
 
 interface CheckoutFormProps {
   bicycles: Bicycle[];
+  user?: {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    addressLine1?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zip?: string | null;
+    country?: string | null;
+  } | null;
 }
 
-const CheckoutForm = ({ bicycles }: CheckoutFormProps) => {
+const CheckoutForm = ({ bicycles, user }: CheckoutFormProps) => {
   const [activeTab, setActiveTab] = useState<CheckoutTabs>(
     CheckoutTabs.Shipping
   );
+
+  let defaultFirstName = '';
+  let defaultLastName = '';
+  if (user?.name) {
+    const parts = user.name.split(' ');
+    defaultFirstName = parts[0] || '';
+    defaultLastName = parts.slice(1).join(' ') || '';
+  }
+
   const [shippingDetails, setShippingDetails] = useState<ShippingDetails>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: '',
+    firstName: defaultFirstName,
+    lastName: defaultLastName,
+    email: user?.email || '',
+    phone: user?.phone || '',
+    address: user?.addressLine1 || '',
+    city: user?.city || '',
+    state: user?.state || '',
+    zipCode: user?.zip || '',
+    country: user?.country || '',
   });
   const [selectedShipping, setSelectedShipping] = useState<DeliveryDetails>({
     shippingOption: 'nova-poshta',

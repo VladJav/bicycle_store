@@ -24,10 +24,12 @@ const MainHeader = ({ user }: MainHeaderProps) => {
         </div>
         <div className="flex items-center gap-6">
           <CartButton />
-          <Avatar className="w-10 h-10">
-            <AvatarImage src={user.image} alt={user.name} />
-            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-          </Avatar>
+          <Link href="/profile" className="hover:opacity-80 transition-opacity" aria-label="Go to Profile">
+            <Avatar className="w-10 h-10">
+              <AvatarImage src={user.image} alt={user.name} />
+              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+          </Link>
         </div>
       </header>
     );

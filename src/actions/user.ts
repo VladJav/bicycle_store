@@ -27,4 +27,24 @@ export async function getUsers(offset: number) {
     users,
     total
   };
-} 
+}
+
+export async function updateProfile(id: string, data: { 
+  name?: string; 
+  phone?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+}) {
+  await prisma.user.update({
+    where: {
+      id,
+    },
+    data,
+  });
+  revalidatePath('/profile');
+  revalidatePath('/settings');
+}

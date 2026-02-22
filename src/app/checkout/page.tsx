@@ -4,9 +4,18 @@ import Link from 'next/link';
 import OrderSummary from '@src/components/OrderSummary/OrderSummary';
 import CheckoutFormComponent from '@src/components/CheckoutForm/CheckoutForm';
 import prisma from '@src/lib/prisma';
+import { auth } from '@src/lib/auth';
 
 export default async function CheckoutPage() {
   const bicycles = await prisma.bicycle.findMany();
+  const session = await auth();
+  
+  let user = null;
+  if (session?.user?.id) {
+    user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+  }
 
   return (
     <div className="min-h-screen bg-[#fcfdfd] p-4 md:p-8">
@@ -29,7 +38,7 @@ export default async function CheckoutPage() {
         <div className="grid gap-8 md:grid-cols-3">
           <OrderSummary bicycles={bicycles} />
 
-          <CheckoutFormComponent bicycles={bicycles} />
+          <CheckoutFormComponent bicycles={bicycles} user={user} />
         </div>
       </div>
     </div>
