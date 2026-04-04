@@ -54,7 +54,7 @@ const DeliveryOptions = ({
                               key={option.id}
                               className={`flex items-center justify-between rounded-lg border p-4 transition-colors ${
                                 field.value === option.id
-                                  ? 'border-[#415444] bg-[#e0e5ce]/50'
+                                  ? 'border-primary bg-primary/20'
                                   : ''
                               }`}
                             >
@@ -70,7 +70,7 @@ const DeliveryOptions = ({
                                   >
                                     {option.name}
                                   </Label>
-                                  <p className="text-sm text-gray-500">
+                                  <p className="text-sm text-muted-foreground">
                                     {option.description}
                                   </p>
                                 </div>
@@ -96,7 +96,7 @@ const DeliveryOptions = ({
                       Back to Shipping
                     </Button>
                     <Button
-                      className="bg-[#415444] hover:bg-[#415444]/90"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
                       type="submit"
                     >
                       Continue to Payment

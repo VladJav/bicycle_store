@@ -13,10 +13,10 @@ const QuantityChanger = ({ quantity, setQuantity }: QuantityChangerProps) => {
     }
   };
   return (
-    <div className="flex w-32 items-center rounded-full border border-gray-200">
+    <div className="flex w-32 items-center rounded-full border border-input">
       <button
         onClick={() => handleQuantityChange(-1)}
-        className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+        className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
         aria-label="Decrease quantity"
       >
         <Minus className="h-4 w-4" />
@@ -24,7 +24,7 @@ const QuantityChanger = ({ quantity, setQuantity }: QuantityChangerProps) => {
       <span className="flex-1 text-center">{quantity}</span>
       <button
         onClick={() => handleQuantityChange(1)}
-        className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-gray-600 hover:bg-gray-100"
+        className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted"
         aria-label="Increase quantity"
       >
         <Plus className="h-4 w-4" />

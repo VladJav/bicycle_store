@@ -30,7 +30,7 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#fcfdfd]">
+    <div className="flex min-h-screen bg-background">
       <Sidebar />
 
       <main className="flex-1 px-8 py-8">
@@ -58,12 +58,6 @@ export default async function SettingsPage() {
                 Addresses
               </TabsTrigger>
               <TabsTrigger 
-                value="notifications"
-                className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-              >
-                Notifications
-              </TabsTrigger>
-              <TabsTrigger 
                 value="appearance"
                 className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
@@ -71,15 +65,12 @@ export default async function SettingsPage() {
               </TabsTrigger>
             </TabsList>
             
-            <div className="bg-white rounded-lg border shadow-sm p-6 mb-8">
+            <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 mb-8">
               <TabsContent value="security" className="mt-0">
                 <SecuritySettings user={user} />
               </TabsContent>
               <TabsContent value="addresses" className="mt-0">
                 <AddressSettings user={user} />
-              </TabsContent>
-              <TabsContent value="notifications" className="mt-0">
-                <NotificationSettings />
               </TabsContent>
               <TabsContent value="appearance" className="mt-0">
                 <AppearanceSettings />

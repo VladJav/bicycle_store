@@ -49,14 +49,14 @@ export default async function ProductsListSection({
   return (
     <div className="lg:col-span-3">
       {bicycles.length === 0 ? (
-        <div className="flex h-96 flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 p-8 text-center">
-          <h3 className="text-lg font-medium text-gray-900">
+        <div className="flex h-96 flex-col items-center justify-center rounded-lg border border-dashed border-muted-foreground/50 p-8 text-center">
+          <h3 className="text-lg font-medium text-foreground">
             No products found
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Try adjusting your filters or search query.
           </p>
-          <Button className="mt-4 bg-[#415444] hover:bg-[#415444]/90">
+          <Button className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
             Clear All Filters
           </Button>
         </div>
@@ -106,8 +106,8 @@ export default async function ProductsListSection({
                     size="sm"
                     className={`h-8 w-8 rounded-full ${
                       pageNumber === parseInt(page)
-                        ? 'bg-[#415444] text-white hover:bg-[#415444]/90'
-                        : 'hover:bg-[#e0e5ce]'
+                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                        : 'hover:bg-secondary'
                     }`}
                   >
                     <Link href={`/product?page=${pageNumber}`}>
@@ -120,7 +120,7 @@ export default async function ProductsListSection({
                 pageNumber === totalPages - 3
               ) {
                 return (
-                  <span key={index} className="text-sm text-gray-500">
+                  <span key={index} className="text-sm text-muted-foreground">
                     ...
                   </span>
                 );

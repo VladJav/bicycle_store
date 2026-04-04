@@ -36,10 +36,10 @@ export default async function ProductPage({
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Product not found</h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             The product you are looking for does not exist.
           </p>
-          <Button asChild className="mt-4 bg-[#415444] hover:bg-[#415444]/90">
+          <Button asChild className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground">
             <Link href="/">Return to Home</Link>
           </Button>
         </div>
@@ -66,22 +66,22 @@ export default async function ProductPage({
                       className={`h-5 w-5 ${
                         i < Math.floor(Number(product.rating))
                           ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
+                          : 'text-muted'
                       }`}
                     />
                   ))}
                 </div>
-                <span className="ml-2 text-sm text-gray-600">
+                <span className="ml-2 text-sm text-muted-foreground">
                   {product.rating} ({productReviews.length} reviews)
                 </span>
               </div>
             </div>
 
-            <div className="text-2xl font-bold text-[#415444]">
+            <div className="text-2xl font-bold text-primary">
               ${product.price.toFixed(2)}
             </div>
 
-            <p className="text-gray-600">{product.description}</p>
+            <p className="text-muted-foreground">{product.description}</p>
 
             <ProductConfiguration
               colors={product.colors}
@@ -94,7 +94,7 @@ export default async function ProductPage({
 
             <div className="space-y-2">
               <h3 className="font-medium">Features</h3>
-              <ul className="list-inside list-disc space-y-1 text-gray-600">
+              <ul className="list-inside list-disc space-y-1 text-muted-foreground">
                 {product.features.map((feature, index) => (
                   <li key={index}>{feature}</li>
                 ))}
@@ -106,14 +106,14 @@ export default async function ProductPage({
         {session ? (
           <ReviewForm />
         ) : (
-          <div className='mt-8 rounded-lg border border-dashed border-gray-300 p-8 text-center'>
+          <div className='mt-8 rounded-lg border border-dashed border-muted p-8 text-center'>
             <h3 className='text-lg font-medium'>Want to leave a review?</h3>
-            <p className='mt-2 text-gray-600'>Please sign in to share your experience with this product</p>
+            <p className='mt-2 text-muted-foreground'>Please sign in to share your experience with this product</p>
           </div>
         )}
         <div className='mt-16'>
           <Tabs defaultValue="reviews">
-            <TabsList className="grid w-full grid-cols-1 bg-[#e0e5ce]">
+            <TabsList className="grid w-full grid-cols-1 bg-secondary text-secondary-foreground">
               <TabsTrigger value="reviews">
                 Reviews ({productReviews.length})
               </TabsTrigger>
@@ -137,9 +137,9 @@ export default async function ProductPage({
                       />
                     ))
                   ) : (
-                    <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center">
+                    <div className="rounded-lg border border-dashed border-muted p-8 text-center">
                       <h4 className="text-lg font-medium">No reviews yet</h4>
-                      <p className="mt-2 text-gray-600">
+                      <p className="mt-2 text-muted-foreground">
                         Be the first to review this product
                       </p>
                     </div>

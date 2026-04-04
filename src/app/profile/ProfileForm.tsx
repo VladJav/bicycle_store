@@ -35,15 +35,15 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 bg-white p-6 rounded-lg border shadow-sm">
+    <form onSubmit={handleSubmit} className="space-y-5 bg-card text-card-foreground p-6 rounded-lg border shadow-sm">
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-gray-700">Email</Label>
-        <Input id="email" type="email" value={user.email} disabled className="bg-gray-50" />
-        <p className="text-xs text-gray-500">Email cannot be changed.</p>
+        <Label htmlFor="email" className="text-foreground">Email</Label>
+        <Input id="email" type="email" value={user.email} disabled className="bg-muted text-muted-foreground disabled:opacity-75" />
+        <p className="text-xs text-muted-foreground">Email cannot be changed.</p>
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="name" className="text-gray-700">Name</Label>
+        <Label htmlFor="name" className="text-foreground">Name</Label>
         <Input 
           id="name" 
           value={name} 
@@ -53,7 +53,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="phone" className="text-gray-700">Phone Number</Label>
+        <Label htmlFor="phone" className="text-foreground">Phone Number</Label>
         <Input 
           id="phone" 
           value={phone} 

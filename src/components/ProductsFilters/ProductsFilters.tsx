@@ -56,8 +56,8 @@ export default function ProductsFilters({ colors }: { colors: string[] }) {
           className="mb-4"
         />
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">${priceRange[0]}</span>
-          <span className="text-sm text-gray-600">${priceRange[1]}</span>
+          <span className="text-sm text-muted-foreground">${priceRange[0]}</span>
+          <span className="text-sm text-muted-foreground">${priceRange[1]}</span>
         </div>
       </div>
 
@@ -74,11 +74,11 @@ export default function ProductsFilters({ colors }: { colors: string[] }) {
                 onCheckedChange={(checked) =>
                   handleColorChange(color, checked === true)
                 }
-                className="border-gray-300"
+                className="border-primary"
               />
               <label
                 htmlFor={`color-${color}`}
-                className="ml-2 text-sm font-medium text-gray-700"
+                className="ml-2 text-sm font-medium text-foreground"
               >
                 {color}
               </label>
@@ -92,7 +92,7 @@ export default function ProductsFilters({ colors }: { colors: string[] }) {
       <Button
         onClick={clearAllFilters}
         variant="outline"
-        className="w-full border-[#415444] text-[#415444] hover:bg-[#e0e5ce]/50"
+        className="w-full border-primary text-primary hover:bg-secondary"
       >
         Clear All Filters
       </Button>

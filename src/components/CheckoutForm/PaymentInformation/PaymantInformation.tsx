@@ -140,7 +140,7 @@ const PaymentInformation = ({
             <div
               className={`flex items-center justify-between rounded-lg border p-4 transition-colors ${
                 paymentMethod === 'card'
-                  ? 'border-[#415444] bg-[#e0e5ce]/50'
+                  ? 'border-primary bg-primary/20'
                   : ''
               }`}
             >
@@ -157,10 +157,10 @@ const PaymentInformation = ({
           </RadioGroup>
 
           {paymentMethod === 'card' && (
-            <div className="mt-4 space-y-4 rounded-lg border border-gray-200 p-4">
+            <div className="mt-4 space-y-4 rounded-lg border border-border p-4">
               {isLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-[#415444]" />
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
               ) : clientSecret ? (
                 <Elements stripe={stripePromise} options={{ clientSecret }}>

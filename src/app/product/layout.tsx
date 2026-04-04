@@ -19,8 +19,8 @@ export default async function ProductLayout({
 }) {
   const session = await auth();
   return (
-    <div className="min-h-screen bg-[#fcfdfd] pb-16">
-      <header className="border-b bg-white">
+    <div className="min-h-screen bg-background text-foreground pb-16">
+      <header className="border-b border-border bg-background">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <Link href="/" className="mr-8">
@@ -33,18 +33,18 @@ export default async function ProductLayout({
               />
             </Link>
             <nav className="hidden space-x-6 md:flex">
-              <Link href="/" className="text-gray-500 hover:text-gray-900">
+              <Link href="/" className="text-muted-foreground hover:text-foreground">
                 Home
               </Link>
-              <Link href="/product" className="text-gray-500 hover:text-gray-900">
+              <Link href="/product" className="text-muted-foreground hover:text-foreground">
                 Shop
               </Link>
             </nav>
           </div>
           <div className="flex items-center gap-6">
             <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <Input className="w-64 pl-10" placeholder="Search products" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input className="w-64 pl-10 bg-background text-foreground" placeholder="Search products" />
             </div>
             <CartButton />
             {session && session.user ? (

@@ -17,8 +17,8 @@ const Sidebar = () => {
   const getLinkClasses = (path: string) => {
     const isActive = pathname === path;
     return isActive
-      ? 'flex items-center gap-3 rounded-lg bg-[#e0e5ce] px-3 py-2 text-[#415444] transition-colors'
-      : 'flex items-center gap-3 px-3 py-2 text-gray-500 transition-colors hover:text-gray-900';
+      ? 'flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary transition-colors'
+      : 'flex items-center gap-3 px-3 py-2 text-muted-foreground transition-colors hover:text-foreground';
   };
 
   return (
@@ -56,7 +56,7 @@ const Sidebar = () => {
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: '/auth/sign-in' })}
-          className="flex w-full items-center gap-3 px-3 py-2 text-red-500 transition-colors hover:text-red-600"
+          className="flex w-full items-center gap-3 px-3 py-2 text-destructive transition-colors hover:bg-destructive/10 hover:text-destructive rounded-md"
         >
           <LogOut className="h-5 w-5" />
           Logout

@@ -36,7 +36,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#fcfdfd]">
+    <div className="flex min-h-screen bg-background text-foreground">
       <Sidebar />
 
       <main className="flex-1 px-8 py-8">
@@ -60,19 +60,19 @@ export default async function ProfilePage() {
               {user.orders.length > 0 ? (
                 <div className="space-y-4">
                   {user.orders.map((order) => (
-                    <div key={order.id} className="border p-5 rounded-lg shadow-sm bg-white flex flex-col gap-4">
+                    <div key={order.id} className="border p-5 rounded-lg shadow-sm bg-card text-card-foreground flex flex-col gap-4">
                       <div className="flex justify-between items-center border-b pb-3">
                         <div>
-                          <span className="font-semibold text-sm text-gray-700">Order #{order.id.slice(0, 8)}</span>
-                          <p className="text-gray-500 text-xs mt-1">{new Date(order.createdAt).toLocaleDateString()}</p>
+                          <span className="font-semibold text-sm">Order #{order.id.slice(0, 8)}</span>
+                          <p className="text-muted-foreground text-xs mt-1">{new Date(order.createdAt).toLocaleDateString()}</p>
                         </div>
-                        <span className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full font-medium">{order.status.title}</span>
+                        <span className="bg-secondary text-secondary-foreground text-xs px-3 py-1 rounded-full font-medium">{order.status.title}</span>
                       </div>
                       
                       <div className="space-y-3">
                         {order.orderItems.map((item) => (
                           <div key={item.id} className="flex justify-between items-center text-sm">
-                            <span className="text-gray-700">{item.quantity}x {item.bicycle.title}</span>
+                            <span>{item.quantity}x {item.bicycle.title}</span>
                             <span className="font-medium">${(item.quantity * item.bicycle.price).toFixed(2)}</span>
                           </div>
                         ))}
@@ -81,7 +81,7 @@ export default async function ProfilePage() {
                   ))}
                 </div>
               ) : (
-                <div className="border p-8 rounded-lg text-center bg-gray-50 text-gray-500">
+                <div className="border p-8 rounded-lg text-center bg-muted text-muted-foreground">
                   <p>You have no recent orders.</p>
                 </div>
               )}

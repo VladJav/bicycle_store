@@ -32,7 +32,7 @@ const CollectionCard = ({
   return (
     <Card
       key={id}
-      className="group gap-2 border-0 bg-[#e0e5ce] rounded-[24px] overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+      className="group gap-2 border-0 bg-secondary/30 dark:bg-secondary rounded-[24px] overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
     >
       <CardHeader className="p-0 relative">
         <div className="absolute inset-0 h-[295px] bg-black/40 opacity-0 -translate-y-2 transition-opacity group-hover:opacity-100 z-10" />
@@ -56,7 +56,7 @@ const CollectionCard = ({
                 <svg
                   key={i}
                   className={`w-4 h-4 ${
-                    i < Number(rating) ? 'text-yellow-400' : 'text-gray-300'
+                    i < Number(rating) ? 'text-yellow-400' : 'text-muted'
                   }`}
                   fill="currentColor"
                   viewBox="0 0 20 20"
@@ -65,15 +65,15 @@ const CollectionCard = ({
                 </svg>
               ))}
             </div>
-            <span className="text-sm text-gray-600">({rating})</span>
+            <span className="text-sm text-muted-foreground">({rating})</span>
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-[#338838] text-xl font-semibold">$ {price}</p>
+          <p className="text-primary text-xl font-semibold">$ {price}</p>
           <Button
             variant="outline"
             size="sm"
-            className="rounded-full hover:bg-[#415444] hover:text-white transition-colors"
+            className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
             onClick={handleAddToCart}
           >
             Add to Cart

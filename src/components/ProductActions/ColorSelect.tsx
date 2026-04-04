@@ -14,8 +14,8 @@ const ColorSelect = ({ colors, setSelectedColor, selectedColor }: ColorSelectPro
           onClick={() => setSelectedColor(color)}
           className={`rounded-full border px-4 py-2 text-sm ${
             selectedColor === color
-              ? 'border-[#415444] bg-[#e0e5ce] text-[#415444]'
-              : 'border-gray-200 hover:border-gray-300'
+              ? 'border-primary bg-primary/20 text-primary'
+              : 'border-input hover:border-muted'
           }`}
         >
           {color}

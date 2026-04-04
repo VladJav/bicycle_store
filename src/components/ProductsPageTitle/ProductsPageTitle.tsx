@@ -36,12 +36,12 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-start justify-between border-b border-gray-200 pb-6 pt-2 md:flex-row md:items-center">
+        <div className="flex flex-col items-start justify-between border-b border-border pb-6 pt-2 md:flex-row md:items-center">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
               All Products
             </h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               {count} results
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
           {/* Mobile search */}
           <div className="mt-4 w-full md:hidden">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 className="w-full pl-10"
                 placeholder="Search products"
@@ -91,7 +91,7 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
           {/* Desktop sort */}
           <div className="hidden items-center gap-4 md:flex">
             <div className="flex items-center gap-2">
-              <SlidersHorizontal className="h-4 w-4 text-gray-500" />
+              <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium">Sort by:</span>
             </div>
             <Select defaultValue='price-low-high' onValueChange={handleSortOptionChange}>
@@ -120,12 +120,12 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
             className="fixed inset-0 bg-opacity-25"
             onClick={() => setMobileFiltersOpen(false)}
           ></div>
-          <div className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+          <div className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-background py-4 pb-12 shadow-xl">
             <div className="flex items-center justify-between px-4">
-              <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+              <h2 className="text-lg font-medium text-foreground">Filters</h2>
               <button
                 type="button"
-                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-transparent p-2 text-muted-foreground hover:bg-muted"
                 onClick={() => setMobileFiltersOpen(false)}
               >
                 <span className="sr-only">Close menu</span>

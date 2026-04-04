@@ -38,7 +38,7 @@ export default function ProductsList({ products }: { products: ProductWithRating
           key={product.id}
           className="group relative overflow-hidden rounded-lg border-0 shadow-sm transition-all duration-300 hover:shadow-md"
         >
-          <div className="relative aspect-square overflow-hidden bg-gray-100">
+          <div className="relative aspect-square overflow-hidden bg-secondary">
             <Link href={`/product/${product.id}`}>
               <Image
                 src={product.images[0] || '/placeholder.svg'}
@@ -52,7 +52,7 @@ export default function ProductsList({ products }: { products: ProductWithRating
               <div className="flex gap-2">
                 <Button
                   onClick={() => handleAddToCart(product)}
-                  className="bg-white text-[#415444] hover:bg-[#e0e5ce]"
+                  className="bg-background text-foreground hover:bg-muted"
                 >
                   Add to Cart
                 </Button>
@@ -61,7 +61,7 @@ export default function ProductsList({ products }: { products: ProductWithRating
           </div>
           <div className="p-4">
             <Link href={`/product/${product.id}`}>
-              <h3 className="text-lg font-medium text-gray-900">
+              <h3 className="text-lg font-medium text-foreground">
                 {product.title}
               </h3>
             </Link>
@@ -73,7 +73,7 @@ export default function ProductsList({ products }: { products: ProductWithRating
                     className={`h-4 w-4 ${
                       product.rating > rating
                         ? 'fill-yellow-400 text-yellow-400'
-                        : 'fill-gray-200 text-gray-200'
+                        : 'fill-muted text-muted'
                     }`}
                     viewBox="0 0 20 20"
                     fill="currentColor"
@@ -86,12 +86,12 @@ export default function ProductsList({ products }: { products: ProductWithRating
                   </svg>
                 ))}
               </div>
-              <span className="ml-1 text-xs text-gray-500">
+              <span className="ml-1 text-xs text-muted-foreground">
                 ({product.reviews.length})
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between">
-              <p className="text-lg font-semibold text-[#415444]">
+              <p className="text-lg font-semibold text-primary">
                 ${product.price.toFixed(2)}
               </p>
             </div>

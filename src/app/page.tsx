@@ -12,7 +12,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <div className="flex min-h-screen bg-[#fcfdfd]">
+    <div className="flex min-h-screen bg-background text-foreground">
       <Sidebar />
 
       <main className="flex-1 px-8 py-8">

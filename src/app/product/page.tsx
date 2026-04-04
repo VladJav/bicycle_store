@@ -40,12 +40,12 @@ export default async function ProductsPage({
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-        <nav className="flex text-sm text-gray-500">
-          <Link href="/" className="hover:text-gray-900">
+        <nav className="flex text-sm text-muted-foreground">
+          <Link href="/" className="hover:text-foreground">
             Home
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">All Products</span>
+          <span className="text-foreground">All Products</span>
         </nav>
       </div>
 

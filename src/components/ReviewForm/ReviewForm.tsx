@@ -42,7 +42,7 @@ const ReviewForm = () => {
   };
 
   return (
-    <div className="mt-8 rounded-lg bg-[#e0e5ce]/30 p-6">
+    <div className="mt-8 rounded-lg bg-secondary p-6">
       <h3 className="mb-4 text-lg font-medium">Write a Review</h3>
       <Formik
         initialValues={{ rating: 0, title: '', comment: '' }}
@@ -70,7 +70,7 @@ const ReviewForm = () => {
                       className={`h-6 w-6 ${
                         rating <= values.rating
                           ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
+                          : 'text-muted'
                       }`}
                     />
                   </button>
@@ -78,8 +78,7 @@ const ReviewForm = () => {
               </div>
               <ErrorMessage
                 name="rating"
-                component="div"
-                className="mt-1 text-sm text-red-500"
+                className="mt-1 text-sm text-destructive"
               />
             </div>
             <div>
@@ -93,13 +92,12 @@ const ReviewForm = () => {
                 id="review-title"
                 name="title"
                 type="text"
-                className="w-full rounded-md border border-gray-300 p-2"
+                className="w-full rounded-md border border-input bg-background text-foreground p-2"
                 placeholder="Summarize your review"
               />
               <ErrorMessage
                 name="title"
-                component="div"
-                className="mt-1 text-sm text-red-500"
+                className="mt-1 text-sm text-destructive"
               />
             </div>
             <div>
@@ -113,18 +111,17 @@ const ReviewForm = () => {
                 as="textarea"
                 id="review-comment"
                 name="comment"
-                className="h-32 w-full rounded-md border border-gray-300 p-2"
+                className="h-32 w-full rounded-md border border-input bg-background text-foreground p-2"
                 placeholder="Write your review here..."
               />
               <ErrorMessage
                 name="comment"
-                component="div"
-                className="mt-1 text-sm text-red-500"
+                className="mt-1 text-sm text-destructive"
               />
             </div>
             <Button
               type="submit"
-              className="bg-[#415444] hover:bg-[#415444]/90"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Submit Review
             </Button>

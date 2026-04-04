@@ -20,7 +20,7 @@ const MainHeader = ({ user }: MainHeaderProps) => {
           <h2 className="text-2xl font-semibold">
             Hi, {user.name}! <span className="ml-1">👋</span>
           </h2>
-          <p className="text-gray-500">Welcome Back</p>
+          <p className="text-muted-foreground">Welcome Back</p>
         </div>
         <div className="flex items-center gap-6">
           <CartButton />
@@ -38,7 +38,7 @@ const MainHeader = ({ user }: MainHeaderProps) => {
     <header className="mb-8 flex items-center justify-between">
       <div className="space-y-1">
         <h2 className="text-2xl font-semibold">Welcome to Bicycle Store</h2>
-        <p className="text-gray-500">Discover our exclusive collection</p>
+        <p className="text-muted-foreground">Discover our exclusive collection</p>
       </div>
       <div className="flex items-center gap-6">
         <CartButton />

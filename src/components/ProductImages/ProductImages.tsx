@@ -12,7 +12,7 @@ const ProductImages = ({ images, name }: ProductImagesProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   return (
     <div className="space-y-4">
-      <div className="overflow-hidden rounded-2xl bg-[#f8f8f8]">
+      <div className="overflow-hidden rounded-2xl bg-secondary">
         <Image
           src={images[selectedImage] || '/placeholder.svg'}
           alt={name}
@@ -28,8 +28,8 @@ const ProductImages = ({ images, name }: ProductImagesProps) => {
             onClick={() => setSelectedImage(index)}
             className={`overflow-hidden rounded-lg ${
               selectedImage === index
-                ? 'ring-2 ring-[#415444]'
-                : 'ring-1 ring-gray-200'
+                ? 'ring-2 ring-primary'
+                : 'ring-1 ring-border'
             }`}
           >
             <Image

@@ -30,59 +30,59 @@ export default function AppearanceSettings() {
           {/* Light Theme Option */}
           <div 
             onClick={() => setTheme('light')}
-            className={`border-2 rounded-lg p-4 cursor-pointer hover:border-black transition-all ${
-              theme === 'light' ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-gray-200'
+            className={`border-2 rounded-lg p-4 cursor-pointer hover:border-foreground transition-all ${
+              theme === 'light' ? 'border-primary ring-2 ring-primary ring-offset-2 ring-offset-background' : 'border-border'
             }`}
           >
-            <div className="aspect-[4/3] rounded bg-[#fcfdfd] border mb-3 flex items-center justify-center">
+            <div className="aspect-[4/3] rounded bg-white border border-border mb-3 flex items-center justify-center">
               <div className="space-y-2 w-3/4">
-                <div className="h-4 bg-gray-200 rounded w-full"></div>
-                <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                <div className="h-4 bg-zinc-200 rounded w-full"></div>
+                <div className="h-4 bg-zinc-200 rounded w-2/3"></div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <Label className="cursor-pointer">Light</Label>
-              <div className={`w-4 h-4 rounded-full border ${theme === 'light' ? 'border-4 border-primary' : 'border-gray-300'}`}></div>
+              <div className={`w-4 h-4 rounded-full border ${theme === 'light' ? 'border-4 border-primary' : 'border-border'}`}></div>
             </div>
           </div>
 
           {/* Dark Theme Option */}
           <div 
             onClick={() => setTheme('dark')}
-            className={`border-2 rounded-lg p-4 cursor-pointer hover:border-black transition-all ${
-              theme === 'dark' ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-gray-200'
+            className={`border-2 rounded-lg p-4 cursor-pointer hover:border-foreground transition-all ${
+              theme === 'dark' ? 'border-primary ring-2 ring-primary ring-offset-2 ring-offset-background' : 'border-border'
             }`}
           >
-            <div className="aspect-[4/3] rounded bg-gray-950 border border-gray-800 mb-3 flex items-center justify-center">
+            <div className="aspect-[4/3] rounded bg-zinc-950 border border-zinc-800 mb-3 flex items-center justify-center">
               <div className="space-y-2 w-3/4">
-                <div className="h-4 bg-gray-800 rounded w-full"></div>
-                <div className="h-4 bg-gray-800 rounded w-2/3"></div>
+                <div className="h-4 bg-zinc-800 rounded w-full"></div>
+                <div className="h-4 bg-zinc-800 rounded w-2/3"></div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <Label className="cursor-pointer">Dark</Label>
-              <div className={`w-4 h-4 rounded-full border ${theme === 'dark' ? 'border-4 border-primary' : 'border-gray-300'}`}></div>
+              <div className={`w-4 h-4 rounded-full border ${theme === 'dark' ? 'border-4 border-primary' : 'border-border'}`}></div>
             </div>
           </div>
 
           {/* System Theme Option */}
           <div 
             onClick={() => setTheme('system')}
-            className={`border-2 rounded-lg p-4 cursor-pointer hover:border-black transition-all ${
-              theme === 'system' ? 'border-primary ring-2 ring-primary ring-offset-2' : 'border-gray-200'
+            className={`border-2 rounded-lg p-4 cursor-pointer hover:border-foreground transition-all ${
+              theme === 'system' ? 'border-primary ring-2 ring-primary ring-offset-2 ring-offset-background' : 'border-border'
             }`}
           >
-            <div className="aspect-[4/3] rounded overflow-hidden flex flex-col mb-3">
-              <div className="flex-1 bg-[#fcfdfd] border-b border-t border-l border-r border-gray-200 flex items-center justify-center rounded-t-sm">
-                 <div className="h-2 bg-gray-200 rounded w-1/2"></div>
+            <div className="aspect-[4/3] rounded border border-border overflow-hidden flex flex-col mb-3">
+              <div className="flex-1 bg-white flex items-center justify-center">
+                 <div className="h-2 bg-zinc-200 rounded w-1/2"></div>
               </div>
-              <div className="flex-1 bg-gray-950 border-b border-l border-r border-gray-800 flex items-center justify-center rounded-b-sm">
-                 <div className="h-2 bg-gray-800 rounded w-1/2"></div>
+              <div className="flex-1 bg-zinc-950 flex items-center justify-center">
+                 <div className="h-2 bg-zinc-800 rounded w-1/2"></div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <Label className="cursor-pointer">System</Label>
-              <div className={`w-4 h-4 rounded-full border ${theme === 'system' ? 'border-4 border-primary' : 'border-gray-300'}`}></div>
+              <div className={`w-4 h-4 rounded-full border ${theme === 'system' ? 'border-4 border-primary' : 'border-border'}`}></div>
             </div>
           </div>
         </div>

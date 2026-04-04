@@ -80,11 +80,11 @@ const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
                     <p className="ml-4">${item.price.toFixed(2)}</p>
                   </div>
                   <div className="flex items-end justify-between text-sm">
-                    <p className="text-gray-500">Quality {item.quantity}</p>
+                    <p className="text-muted-foreground">Quality {item.quantity}</p>
                     <p className="ml-4">${(item.quantity || 0) * item.price}</p>
                   </div>
                   <div className="flex items-end justify-between text-sm">
-                    <p className="text-gray-500">Color {item.selectedColor}</p>
+                    <p className="text-muted-foreground">Color {item.selectedColor}</p>
                   </div>
                 </div>
               </div>

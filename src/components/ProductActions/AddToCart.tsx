@@ -12,7 +12,7 @@ const AddToCart = ({ handleAddToCart }: AddToCartProps) => {
   return (
     <Button
       onClick={handleAddToCart}
-      className="flex-1 bg-[#415444] hover:bg-[#415444]/90"
+      className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90"
     >
       <ShoppingBagIcon className="mr-2 h-5 w-5" />
       Add to Cart

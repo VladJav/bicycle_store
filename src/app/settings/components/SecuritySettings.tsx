@@ -90,20 +90,6 @@ export default function SecuritySettings({ user }: SecuritySettingsProps) {
           </form>
         )}
       </div>
-
-      <div className="pt-6 border-t">
-        <h3 className="text-lg font-medium">Two-Factor Authentication</h3>
-        <p className="text-sm text-gray-500 mb-4">
-          Add an extra layer of security to your account.
-        </p>
-        <div className="flex items-center justify-between p-4 border rounded-md">
-          <div>
-            <p className="font-medium text-sm">Authenticator App</p>
-            <p className="text-sm text-gray-500">Use an app like Google Authenticator to get 2FA codes.</p>
-          </div>
-          <Button variant="outline" onClick={() => toast.info('2FA Setup not implemented yet')}>Enable</Button>
-        </div>
-      </div>
     </div>
   );
 }

@@ -60,7 +60,7 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
         <aside
           className={cn(
             'fixed right-0 top-0 bottom-0 z-50 w-96 border-l px-8 py-8 flex flex-col transition-all duration-300 ease-in-out',
-            'bg-white h-screen overflow-hidden justify-center',
+            'bg-background text-foreground h-screen overflow-hidden justify-center',
             isOpen ? 'translate-x-0' : 'translate-x-full'
           )}
         >
@@ -98,7 +98,7 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
       <aside
         className={cn(
           'fixed right-0 top-0 bottom-0 z-50 w-96 border-l px-8 py-8 flex flex-col transition-all duration-300 ease-in-out',
-          'bg-white h-screen overflow-hidden',
+          'bg-background text-foreground h-screen overflow-hidden',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
@@ -134,21 +134,21 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
             {cartItems.map((item) => (
               <div
                 key={item.id + item.selectedColor}
-                className="flex gap-6 bg-white rounded-3xl p-4 shadow-sm"
+                className="flex gap-6 bg-card text-card-foreground rounded-3xl p-4 shadow-sm border"
               >
                 <Image
                   src={item.images[0] || '/placeholder.svg'}
                   alt={item.title}
                   width={100}
                   height={100}
-                  className="h-[100px] w-[100px] rounded-2xl bg-[#e0e5ce] object-cover"
+                  className="h-[100px] w-[100px] rounded-2xl bg-secondary object-cover"
                 />
                 <div className="flex-1">
                   <div className="mb-4 flex items-start justify-between">
                     <div>
                       <h4 className="font-semibold text-lg">{item.title}</h4>
                       {item.selectedColor && (
-                        <p className="text-sm text-[#338838] mt-1">
+                        <p className="text-sm text-primary mt-1">
                           COLOR {item.selectedColor}
                         </p>
                       )}
@@ -164,11 +164,11 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
                     </Button>
                   </div>
                   <div className="flex items-center justify-end">
-                    <div className="flex items-center gap-4 bg-[#f7f7f7] rounded-full px-4 py-1">
+                    <div className="flex items-center gap-4 bg-muted text-muted-foreground rounded-full px-4 py-1">
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-gray-500 hover:text-gray-700"
+                        className="hover:text-foreground"
                         onClick={() => removeOneItem(item.id)}
                         aria-label={`Decrease quantity of ${item.title}`}
                       >
@@ -178,7 +178,7 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="text-gray-500 hover:text-gray-700"
+                        className="hover:text-foreground"
                         onClick={() =>
                           addToCart({
                             color: item.selectedColor || item.colors[0],
@@ -200,19 +200,19 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
 
         <div className="mt-8 space-y-4">
           <div className="flex items-center justify-between text-base">
-            <p className="text-gray-600">Sub Total</p>
+            <p className="text-muted-foreground">Sub Total</p>
             <p className="font-semibold">$ {totalCost.toFixed(2)}</p>
           </div>
           <div className="flex items-center justify-between text-base">
-            <p className="text-gray-600">Shipping</p>
-            <p className="text-[#338838]">FREE</p>
+            <p className="text-muted-foreground">Shipping</p>
+            <p className="text-primary">FREE</p>
           </div>
           <Separator />
           <div className="flex items-center justify-between text-lg font-semibold">
             <p>Total</p>
             <p>$ {totalCost.toFixed(2)}</p>
           </div>
-          <Button disabled={cartItems.length === 0} className="w-full bg-[#415444] hover:bg-[#415444]/90 rounded-2xl h-14 text-lg font-semibold mt-4">
+          <Button disabled={cartItems.length === 0} className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl h-14 text-lg font-semibold mt-4">
             <Link href="/checkout">Checkout</Link>
           </Button>
         </div>
