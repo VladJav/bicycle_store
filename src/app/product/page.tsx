@@ -5,7 +5,6 @@ import ProductsFilters from '@src/components/ProductsFilters/ProductsFilters';
 import ProductsPageTitle from '@src/components/ProductsPageTitle/ProductsPageTitle';
 import ProductsListSection from '@src/components/ProductsListSection/ProductsListSection';
 import { getAllBicyclesColors, getAllBicycles, getBicyclesCount } from '@src/actions/bicycle';
-import CartSidebar from '@src/components/layout/CartSidebar';
 
 export default async function ProductsPage({
   searchParams,
@@ -70,7 +69,6 @@ export default async function ProductsPage({
           </div>
         </div>
       </div>
-      <CartSidebar bicycles={bicycles} />
     </>
   );
 }

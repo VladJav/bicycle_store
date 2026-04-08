@@ -15,7 +15,6 @@ import ReviewForm from '@src/components/ReviewForm/ReviewForm';
 import Review from '@src/components/Review/Review';
 import ProductImages from '@src/components/ProductImages/ProductImages';
 import { getAllBicycles, getBicycle } from '@src/actions/bicycle';
-import CartSidebar from '@src/components/layout/CartSidebar/CartSidebar';
 import ProductConfiguration from '@src/components/ProductConfiguration/ProductConfiguration';
 import { auth } from '@src/lib/auth';
 
@@ -150,7 +149,6 @@ export default async function ProductPage({
           </Tabs>
         </div>
       </div>
-      <CartSidebar bicycles={bicycles} />
     </>
   );
 }

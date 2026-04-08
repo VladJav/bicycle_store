@@ -1,8 +1,7 @@
 import { auth } from '@src/lib/auth';
 import { redirect } from 'next/navigation';
 import prisma from '@src/lib/prisma';
-import Sidebar from '@src/components/layout/Sidebar/Sidebar';
-import MainHeader from '@src/components/layout/MainHeader';
+import Header from '@src/components/layout/Header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/components/ui/tabs';
 
 // Import our new components
@@ -30,55 +29,48 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
+    <div className="flex flex-col min-h-screen bg-background pb-16">
+      <Header />
 
-      <main className="flex-1 px-8 py-8">
-        <MainHeader user={{
-          name: user.name || 'User',
-          email: user.email,
-          image: user.image || '',
-        }} />
-
-        <div className="container mx-auto max-w-5xl">
-          <h1 className="text-3xl font-bold mb-8">Settings</h1>
-          
-          <Tabs defaultValue="security" className="w-full">
-            <TabsList className="mb-8 w-full justify-start rounded-none border-b bg-transparent p-0">
-              <TabsTrigger 
-                value="security" 
-                className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-              >
-                Security & Login
-              </TabsTrigger>
-              <TabsTrigger 
-                value="addresses"
-                className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-              >
-                Addresses
-              </TabsTrigger>
-              <TabsTrigger 
-                value="appearance"
-                className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none"
-              >
-                Appearance
-              </TabsTrigger>
-            </TabsList>
-            
-            <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 mb-8">
-              <TabsContent value="security" className="mt-0">
-                <SecuritySettings user={user} />
-              </TabsContent>
-              <TabsContent value="addresses" className="mt-0">
-                <AddressSettings user={user} />
-              </TabsContent>
-              <TabsContent value="appearance" className="mt-0">
-                <AppearanceSettings />
-              </TabsContent>
-            </div>
-          </Tabs>
-
+      <main className="flex-1 px-8 py-8 w-full max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold">Settings</h1>
         </div>
+        
+        <Tabs defaultValue="security" className="w-full">
+          <TabsList className="mb-8 w-full justify-start rounded-none border-b bg-transparent p-0 overflow-x-auto overflow-y-hidden">
+            <TabsTrigger 
+              value="security" 
+              className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none whitespace-nowrap"
+            >
+              Security & Login
+            </TabsTrigger>
+            <TabsTrigger 
+              value="addresses"
+              className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none whitespace-nowrap"
+            >
+              Addresses
+            </TabsTrigger>
+            <TabsTrigger 
+              value="appearance"
+              className="relative h-10 rounded-none border-b-2 border-b-transparent bg-transparent px-4 pb-3 pt-2 font-medium text-muted-foreground shadow-none transition-none data-[state=active]:border-b-primary data-[state=active]:text-foreground data-[state=active]:shadow-none whitespace-nowrap"
+            >
+              Appearance
+            </TabsTrigger>
+          </TabsList>
+          
+          <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 mb-8 max-w-4xl">
+            <TabsContent value="security" className="mt-0">
+              <SecuritySettings user={user} />
+            </TabsContent>
+            <TabsContent value="addresses" className="mt-0">
+              <AddressSettings user={user} />
+            </TabsContent>
+            <TabsContent value="appearance" className="mt-0">
+              <AppearanceSettings />
+            </TabsContent>
+          </div>
+        </Tabs>
       </main>
     </div>
   );
