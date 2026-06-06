@@ -23,9 +23,16 @@ interface CheckoutFormProps {
     zip?: string | null;
     country?: string | null;
   } | null;
+  selectedShipping: DeliveryDetails;
+  setSelectedShipping: (value: DeliveryDetails) => void;
 }
 
-const CheckoutForm = ({ bicycles, user }: CheckoutFormProps) => {
+const CheckoutForm = ({
+  bicycles,
+  user,
+  selectedShipping,
+  setSelectedShipping,
+}: CheckoutFormProps) => {
   const [activeTab, setActiveTab] = useState<CheckoutTabs>(
     CheckoutTabs.Shipping
   );
@@ -49,10 +56,6 @@ const CheckoutForm = ({ bicycles, user }: CheckoutFormProps) => {
     zipCode: user?.zip || '',
     country: user?.country || '',
   });
-  const [selectedShipping, setSelectedShipping] = useState<DeliveryDetails>({
-    shippingOption: 'nova-poshta',
-  });
-
   const isShippingValid = ShippingScheme.isValidSync(shippingDetails);
 
   const handleTabChange = async (value: CheckoutTabs) => {

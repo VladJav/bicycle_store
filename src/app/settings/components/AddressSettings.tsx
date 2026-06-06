@@ -32,7 +32,7 @@ export default function AddressSettings({ user }: AddressSettingsProps) {
     e.preventDefault();
     setIsPending(true);
     try {
-      await updateProfile(user.id, {
+      await updateProfile({
         addressLine1,
         addressLine2,
         city,

@@ -19,17 +19,27 @@ import { useDebouncedCallback } from 'use-debounce';
 interface ProductsPageTitleProps {
   colors: string[];
   count: number;
+  search?: string;
+  sort?: string;
 }
 
-export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTitleProps) {  
+export default function ProductsPageTitle({
+  colors,
+  count = 0,
+  search = '',
+  sort = 'price-low-high',
+}: ProductsPageTitleProps) {  
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const router = useRouter();
   const handleSortOptionChange = (value: string) => {
-    router.push(`/product?${updateUrlParams({ sort: value })}`);
+    router.push(`/product?${updateUrlParams({ sort: value, page: null })}`);
   };
   const debouncedSearch = useDebouncedCallback(
     (value) => {
-      router.push(`/product?${updateUrlParams({ search: value.target.value })}`);
+      router.push(`/product?${updateUrlParams({
+        search: value.target.value || null,
+        page: null,
+      })}`);
     },
     1000
   );
@@ -53,6 +63,7 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
               <Input
                 className="w-full pl-10"
                 placeholder="Search products"
+                defaultValue={search}
                 onChange={debouncedSearch}
               />
             </div>
@@ -69,7 +80,7 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
               Filters
             </Button>
             <div className="w-40">
-              <Select defaultValue='featured' onValueChange={handleSortOptionChange}>
+              <Select defaultValue={sort} onValueChange={handleSortOptionChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
@@ -94,7 +105,7 @@ export default function ProductsPageTitle({ colors, count = 0 }: ProductsPageTit
               <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium">Sort by:</span>
             </div>
-            <Select defaultValue='price-low-high' onValueChange={handleSortOptionChange}>
+            <Select defaultValue={sort} onValueChange={handleSortOptionChange}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>

@@ -10,24 +10,39 @@ import {
 } from '@src/components/ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
 import { deleteBicycle } from '@src/actions/bicycle';
-import { Bicycle, Review, Order } from '@generated/prisma';
+import { Bicycle, Review, OrderItem } from '@generated/prisma';
 import DropdownEditAction from '@src/components/DropdownEditAction/DropdownEditAction';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface ProductActionsProps {
   product: Bicycle & {
     reviews: Review[];
-    orders: Order[];
+    orderItems?: OrderItem[];
   };
 }
 
 export function ProductActions({ product }: ProductActionsProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleEditClick = () => {
-    setOpen(true);
+  const handleEditSelect = () => {
     setDropdownOpen(false);
+    window.setTimeout(() => setOpen(true), 0);
+  };
+
+  const handleDeleteSelect = async () => {
+    try {
+      await deleteBicycle(product.id);
+      router.refresh();
+    } catch (error) {
+      toast('Product not deleted', {
+        description:
+          error instanceof Error ? error.message : 'Unable to delete product',
+      });
+    }
   };
 
   return (
@@ -41,17 +56,20 @@ export function ProductActions({ product }: ProductActionsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>
-            <button onClick={handleEditClick}>Edit</button>
+          <DropdownMenuItem onSelect={handleEditSelect}>
+            Edit
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <form action={() => deleteBicycle(product.id)}>
-              <button type='submit'>Delete</button>
-            </form>
+          <DropdownMenuItem
+            className='text-destructive'
+            onSelect={() => {
+              void handleDeleteSelect();
+            }}
+          >
+            Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <DropdownEditAction product={product} open={open} setOpen={setOpen} />
     </>
   );
-} 
+}

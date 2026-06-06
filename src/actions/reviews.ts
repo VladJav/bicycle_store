@@ -3,9 +3,15 @@
 import { auth } from '@src/lib/auth';
 import prisma from '@src/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { Review } from '@generated/prisma';
 
-export async function createReview(review: Review) {
+interface CreateReviewInput {
+  title: string;
+  comment: string;
+  rating: number;
+  bicycleId: string;
+}
+
+export async function createReview(review: CreateReviewInput) {
   const session = await auth();
   if (!session || !session.user) {
     throw new Error('Unauthorized');

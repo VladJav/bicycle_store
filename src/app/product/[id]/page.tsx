@@ -3,7 +3,6 @@ import type React from 'react';
 import { Star } from 'lucide-react';
 import Link from 'next/link';
 
-import { Button } from '@src/components/ui/button';
 import { Separator } from '@src/components/ui/separator';
 import {
   Tabs,
@@ -38,9 +37,12 @@ export default async function ProductPage({
           <p className="mt-2 text-muted-foreground">
             The product you are looking for does not exist.
           </p>
-          <Button asChild className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground">
-            <Link href="/">Return to Home</Link>
-          </Button>
+          <Link
+            href="/"
+            className="mt-4 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs transition-all hover:bg-primary/90"
+          >
+            Return to Home
+          </Link>
         </div>
       </div>
     );
@@ -126,14 +128,13 @@ export default async function ProductPage({
                 {/* Review List */}
                 <div className="space-y-6">
                   {productReviews.length > 0 ? (
-                    productReviews.map((review) => (
-                      <Review
-                        key={review.id}
-                        {...review}
-                        // @ts-expect-error - TODO: fix this
-                        user={review.user}
-                        date={review.createdAt.toISOString()}
-                      />
+	                    productReviews.map((review) => (
+	                      <Review
+	                        key={review.id}
+	                        {...review}
+	                        user={review.user}
+	                        date={review.createdAt.toISOString()}
+	                      />
                     ))
                   ) : (
                     <div className="rounded-lg border border-dashed border-muted p-8 text-center">

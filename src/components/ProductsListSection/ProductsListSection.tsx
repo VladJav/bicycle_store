@@ -1,50 +1,101 @@
 import Link from 'next/link';
 
-import { Button } from '@src/components/ui/button';
 import ProductsList from '@src/components/ProductsList/ProductsList';
 import { getAllBicycles, getBicyclesCount } from '@src/actions/bicycle';
+import { Prisma } from '@generated/prisma';
 
 const BICYCLES_PER_PAGE = 10;
+const pageButtonClass =
+  'inline-flex h-8 w-8 items-center justify-center rounded-full border bg-background text-sm font-medium shadow-xs transition-all hover:bg-secondary';
+const activePageButtonClass =
+  'inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground shadow-xs transition-all hover:bg-primary/90';
+const disabledIconButtonClass =
+  'inline-flex h-8 w-8 items-center justify-center rounded-full border bg-background text-sm font-medium opacity-50';
+const clearFiltersClass =
+  'mt-4 inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs transition-all hover:bg-primary/90';
 
 export default async function ProductsListSection({
   page = '1',
   price,
   colors,
+  search,
   sort = 'price-low-high',
 }: {
   page: string;
   price?: string;
   colors?: string;
+  search?: string;
   sort?: string;
 }) {
-  const bicycles = await getAllBicycles({
-    where: {
-      price: price
-        ? {
-          gte: parseInt(price.split('-')[0]),
-          lte: parseInt(price.split('-')[1]),
-        }
-        : {
-          gte: 100,
-          lte: Number.MAX_SAFE_INTEGER,
+  const currentPage = Math.max(1, parseInt(page) || 1);
+  const priceRange = price?.split('-').map((value) => parseInt(value));
+  const where: Prisma.BicycleWhereInput = {
+    price: priceRange
+      ? {
+        gte: priceRange[0],
+        lte: priceRange[1],
+      }
+      : {
+        gte: 100,
+        lte: Number.MAX_SAFE_INTEGER,
+      },
+    colors: colors ? {
+      hasSome: colors.split(','),
+    } : undefined,
+    OR: search
+      ? [
+        {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
         },
-      colors: colors ? {
-        hasSome: colors.split(','),
-      } : undefined,
-    },
-    orderBy: {
-      ...(sort === 'price-low-high' && { price: 'asc' }),
-      ...(sort === 'price-high-low' && { price: 'desc' }),
-      ...(sort === 'rating' && { rating: 'desc' }),
-      ...(sort === 'newest' && { createdAt: 'desc' }),
-    },
-    include: { reviews: true },
-    take: BICYCLES_PER_PAGE,
-    skip: (parseInt(page) - 1) * BICYCLES_PER_PAGE,
-  });
+        {
+          description: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+      ]
+      : undefined,
+  };
 
-  const totalBicycles = await getBicyclesCount({});
+  const orderBy: Prisma.BicycleOrderByWithRelationInput =
+    sort === 'price-high-low'
+      ? { price: 'desc' }
+      : sort === 'newest' || sort === 'featured'
+        ? { createdAt: 'desc' }
+        : { price: 'asc' };
+
+  const bicycles = sort === 'rating'
+    ? (await getAllBicycles({
+      where,
+      include: { reviews: true },
+    }))
+      .sort((a, b) => Number(b.rating) - Number(a.rating))
+      .slice((currentPage - 1) * BICYCLES_PER_PAGE, currentPage * BICYCLES_PER_PAGE)
+    : await getAllBicycles({
+      where,
+      orderBy,
+      include: { reviews: true },
+      take: BICYCLES_PER_PAGE,
+      skip: (currentPage - 1) * BICYCLES_PER_PAGE,
+    });
+
+  const totalBicycles = await getBicyclesCount({ where });
   const totalPages = Math.ceil(totalBicycles / BICYCLES_PER_PAGE);
+  const createPageHref = (pageNumber: number) => {
+    const params = new URLSearchParams();
+
+    if (pageNumber > 1) params.set('page', String(pageNumber));
+    if (price) params.set('price', price);
+    if (colors) params.set('colors', colors);
+    if (search) params.set('search', search);
+    if (sort) params.set('sort', sort);
+
+    const query = params.toString();
+    return `/product${query ? `?${query}` : ''}`;
+  };
 
   return (
     <div className="lg:col-span-3">
@@ -56,25 +107,26 @@ export default async function ProductsListSection({
           <p className="mt-1 text-sm text-muted-foreground">
             Try adjusting your filters or search query.
           </p>
-          <Button className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
+          <Link href="/product" className={clearFiltersClass}>
             Clear All Filters
-          </Button>
+          </Link>
         </div>
       ) : (
-        // @ts-expect-error - TODO: fix this
         <ProductsList products={bicycles} />
       )}
 
-      {bicycles.length > 0 && (
+      {bicycles.length > 0 && totalPages > 1 && (
         <div className="mt-12 flex items-center justify-center">
           <nav className="flex items-center space-x-2">
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 rounded-full"
-              disabled={parseInt(page) === 1}
-            >
-              <Link href={`/product?page=${parseInt(page) - 1}`}>
+            {currentPage === 1 ? (
+              <span className={disabledIconButtonClass}>
+                <span className="sr-only">Previous Page</span>
+              </span>
+            ) : (
+              <Link
+                href={createPageHref(currentPage - 1)}
+                className={pageButtonClass}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -91,29 +143,26 @@ export default async function ProductsListSection({
                 </svg>
                 <span className="sr-only">Previous Page</span>
               </Link>
-            </Button>
+            )}
             {Array.from({ length: totalPages }, (_, index) => {
               const pageNumber = index + 1;
               if (
                 pageNumber <= 3 ||
                 pageNumber > totalPages - 2 ||
-                Math.abs(pageNumber - parseInt(page)) <= 1
+                Math.abs(pageNumber - currentPage) <= 1
               ) {
                 return (
-                  <Button
+                  <Link
                     key={index}
-                    variant="outline"
-                    size="sm"
-                    className={`h-8 w-8 rounded-full ${
-                      pageNumber === parseInt(page)
-                        ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                        : 'hover:bg-secondary'
-                    }`}
+                    href={createPageHref(pageNumber)}
+                    className={
+                      pageNumber === currentPage
+                        ? activePageButtonClass
+                        : pageButtonClass
+                    }
                   >
-                    <Link href={`/product?page=${pageNumber}`}>
-                      {pageNumber}
-                    </Link>
-                  </Button>
+                    {pageNumber}
+                  </Link>
                 );
               } else if (
                 pageNumber === 4 ||
@@ -127,13 +176,15 @@ export default async function ProductsListSection({
               }
               return null;
             })}
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 rounded-full"
-              disabled={parseInt(page) === totalPages}
-            >
-              <Link href={`/product?page=${parseInt(page) + 1}`}>
+            {currentPage === totalPages ? (
+              <span className={disabledIconButtonClass}>
+                <span className="sr-only">Next Page</span>
+              </span>
+            ) : (
+              <Link
+                href={createPageHref(currentPage + 1)}
+                className={pageButtonClass}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -150,10 +201,10 @@ export default async function ProductsListSection({
                 </svg>
                 <span className="sr-only">Next Page</span>
               </Link>
-            </Button>
+            )}
           </nav>
         </div>
       )}
     </div>
   );
-} 
+}

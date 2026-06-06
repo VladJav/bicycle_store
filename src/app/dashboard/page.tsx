@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@src/components/ui/tabs';
 import { ProductsTable } from './products-table';
 import { CreateProductModal } from '@src/components/CreateProductModal/CreateProductModal';
-import { getAllBicycles } from '@src/actions/bicycle';
+import { getAllBicycles, getBicyclesCount } from '@src/actions/bicycle';
 
 export default async function ProductsPage(
   props: {
@@ -10,20 +10,24 @@ export default async function ProductsPage(
 ) {
   const searchParams = await props.searchParams;
   const search = searchParams.q ?? '';
-  const offset = searchParams.offset ?? 0;
-  const products = await getAllBicycles({
-    where: {
-      title: {
-        contains: search,
-      },
+  const offset = Number(searchParams.offset) || 0;
+  const where = {
+    title: {
+      contains: search,
+      mode: 'insensitive' as const,
     },
+  };
+  const products = await getAllBicycles({
+    where,
     include: {
       reviews: true,
       orderItems: true,
     },
+    take: 5,
+    skip: offset,
   });
   const newOffset = Number(offset) + products.length;
-  const totalProducts = products.length;
+  const totalProducts = await getBicyclesCount({ where });
 
   return (
     <Tabs defaultValue="all">
@@ -41,8 +45,8 @@ export default async function ProductsPage(
         </div>
       </div>
       <TabsContent value="all">
-        <ProductsTable
-          products={products}
+	        <ProductsTable
+	          products={products}
           offset={newOffset ?? 0}
           totalProducts={totalProducts}
         />

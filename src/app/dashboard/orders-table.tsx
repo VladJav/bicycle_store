@@ -32,9 +32,12 @@ import { useState } from 'react';
 import { Status } from '@generated/prisma';
 
 type Order = {
-  id: string;
-  address: string;
-  createdAt: Date;
+	  id: string;
+	  address: string;
+	  shippingMethod: string;
+	  shippingCost: number;
+	  total: number;
+	  createdAt: Date;
   status: {
     id: string;
     title: string;
@@ -43,9 +46,10 @@ type Order = {
     name: string | null;
     email: string;
   };
-  orderItems: {
-    quantity: number;
-    bicycle: {
+	  orderItems: {
+	    quantity: number;
+	    color: string;
+	    bicycle: {
       title: string;
       price: number;
       images: string[];
@@ -73,12 +77,18 @@ export function OrdersTable({
     null
   );
 
+  const openModalAfterMenuClose = (openModal: () => void) => {
+    window.setTimeout(openModal, 0);
+  };
+
   function prevPage() {
     router.back();
   }
 
   function nextPage() {
-    router.push(`/dashboard/orders?offset=${offset}`, { scroll: false });
+    router.push(`/dashboard/orders?offset=${offset + ordersPerPage}`, {
+      scroll: false,
+    });
   }
 
   return (
@@ -146,12 +156,20 @@ export function OrdersTable({
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                          onClick={() => setSelectedOrder(order)}
+                          onSelect={() =>
+                            openModalAfterMenuClose(() =>
+                              setSelectedOrder(order)
+                            )
+                          }
                         >
                           View Details
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => setStatusUpdateOrder(order)}
+                          onSelect={() =>
+                            openModalAfterMenuClose(() =>
+                              setStatusUpdateOrder(order)
+                            )
+                          }
                         >
                           Update Status
                         </DropdownMenuItem>

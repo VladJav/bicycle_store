@@ -154,23 +154,33 @@ const CartSidebar = ({ bicycles }: { bicycles: Bicycle[] }) => {
                       )}
                       <p className="font-semibold mt-2">$ {item.price}</p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => removeFromCart(item.id)}
-                    >
+	                    <Button
+	                      variant="ghost"
+	                      size="icon"
+	                      className="h-8 w-8"
+	                      onClick={() =>
+	                        removeFromCart(
+	                          item.id,
+	                          item.selectedColor || item.colors[0]
+	                        )
+	                      }
+	                    >
                       <TrashIcon />
                     </Button>
                   </div>
                   <div className="flex items-center justify-end">
                     <div className="flex items-center gap-4 bg-muted text-muted-foreground rounded-full px-4 py-1">
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        className="hover:text-foreground"
-                        onClick={() => removeOneItem(item.id)}
-                        aria-label={`Decrease quantity of ${item.title}`}
+	                        variant="ghost"
+	                        size="icon"
+	                        className="hover:text-foreground"
+	                        onClick={() =>
+	                          removeOneItem(
+	                            item.id,
+	                            item.selectedColor || item.colors[0]
+	                          )
+	                        }
+	                        aria-label={`Decrease quantity of ${item.title}`}
                       >
                         -
                       </Button>

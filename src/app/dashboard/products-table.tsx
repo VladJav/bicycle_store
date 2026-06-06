@@ -19,14 +19,20 @@ import { Product } from './product';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@src/components/ui/button';
+import type { Bicycle, OrderItem, Review } from '@generated/prisma';
+
+type DashboardProduct = Bicycle & {
+  rating: string;
+  reviews: Review[];
+  orderItems?: OrderItem[];
+};
 
 export function ProductsTable({
   products,
   offset,
   totalProducts
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  products: any[];
+  products: DashboardProduct[];
   offset: number;
   totalProducts: number;
 }) {
@@ -38,7 +44,7 @@ export function ProductsTable({
   }
 
   function nextPage() {
-    router.push(`/?offset=${offset}`, { scroll: false });
+    router.push(`/dashboard?offset=${offset}`, { scroll: false });
   }
 
   return (

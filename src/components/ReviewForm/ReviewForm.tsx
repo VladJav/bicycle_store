@@ -28,16 +28,15 @@ const reviewSchema = Yup.object().shape({
 });
 
 const ReviewForm = () => {
-  const { id } = useParams();
+	  const { id } = useParams();
   const handleSubmitReview = (
     values: ReviewFormValues,
     { resetForm }: FormikHelpers<ReviewFormValues>
   ) => {
-    createReview({
-      ...values,
-      // @ts-expect-error - TODO: fix this
-      bicycleId: id,
-    });
+	    createReview({
+	      ...values,
+	      bicycleId: String(id),
+	    });
     resetForm();
   };
 

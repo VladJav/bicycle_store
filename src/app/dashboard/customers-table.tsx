@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger
 } from '@src/components/ui/dropdown-menu';
 import { deleteUser } from '@src/actions/user';
+import { toast } from 'sonner';
 
 type Customer = {
   id: string;
@@ -56,7 +57,21 @@ export function CustomersTable({
   }
 
   function nextPage() {
-    router.push(`/dashboard/customers?offset=${offset}`, { scroll: false });
+    router.push(`/dashboard/customers?offset=${offset + customersPerPage}`, {
+      scroll: false,
+    });
+  }
+
+  async function handleDeleteCustomer(id: string) {
+    try {
+      await deleteUser(id);
+      router.refresh();
+    } catch (error) {
+      toast('Customer not deleted', {
+        description:
+          error instanceof Error ? error.message : 'Unable to delete customer',
+      });
+    }
   }
 
   return (
@@ -87,7 +102,10 @@ export function CustomersTable({
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={customer.image || undefined} alt={customer.name || 'User'} />
+                      <AvatarImage
+                        src={customer.image || undefined}
+                        alt={customer.name || 'User'}
+                      />
                       <AvatarFallback>
                         {customer.name?.charAt(0).toUpperCase() || 'U'}
                       </AvatarFallback>
@@ -96,8 +114,12 @@ export function CustomersTable({
                   </div>
                 </TableCell>
                 <TableCell>{customer.email}</TableCell>
-                <TableCell className="hidden md:table-cell">{customer.phone || 'N/A'}</TableCell>
-                <TableCell className="hidden md:table-cell">{customer.ordersCount || 0}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {customer.phone || 'N/A'}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {customer.ordersCount || 0}
+                </TableCell>
                 <TableCell className="hidden md:table-cell">
                   {customer.createdAt.toDateString()}
                 </TableCell>
@@ -111,10 +133,13 @@ export function CustomersTable({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem>
-                        <form action={() => deleteUser(customer.id)}>
-                          <button type='submit'>Delete</button>
-                        </form>
+                      <DropdownMenuItem
+                        className='text-destructive'
+                        onSelect={() => {
+                          void handleDeleteCustomer(customer.id);
+                        }}
+                      >
+                        Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -159,4 +184,4 @@ export function CustomersTable({
       </CardFooter>
     </Card>
   );
-} 
+}

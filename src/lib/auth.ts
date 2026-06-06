@@ -9,53 +9,31 @@ import { getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '@src/lib/prisma';
-import { v4 as uuid } from 'uuid';
-import { encode as defaultEncode } from 'next-auth/jwt';
+import bcrypt from 'bcryptjs';
 
 export const config = {
   callbacks: {
-    async jwt({ token, user, account }) {
-      if (account?.provider === 'credentials') {
-        token.credentials = true;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role ?? 'USER';
       }
+
       return token;
     },
-    async session({ session, user }) {
-      if (session.user) {
-        // @ts-expect-error - user is not used in this callback
-        session.user.role = user.role;
-        session.user.id = user.id;
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = String(token.id);
+        session.user.role = typeof token.role === 'string' ? token.role : 'USER';
       }
+
       return session;
     },
   },
-  jwt: {
-    encode: async function (params) {
-      if (params.token?.credentials) {
-        const sessionToken = uuid();
-
-        if (!params.token.sub) {
-          throw new Error('No user ID found in token');
-        }
-
-        const createdSession = await prisma.session.create({
-          data: {
-            sessionToken: sessionToken,
-            userId: params.token.sub,
-            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-          },
-        });
-
-        if (!createdSession) {
-          throw new Error('Failed to create session');
-        }
-
-        return sessionToken;
-      }
-      return defaultEncode(params);
-    },
+  session: {
+    strategy: 'jwt',
   },
-  secret: 'asdasd',
+  secret: process.env.NEXTAUTH_SECRET ?? 'development-only-next-auth-secret',
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -80,13 +58,18 @@ export const config = {
             return null;
           }
 
-          // In a real app, you would compare hashed passwords
-          // This is a simplified version
-          const isPasswordValid = credentials.password === 'password'; // Replace with actual password check
+          if (!user.password) {
+            return null;
+          }
 
-          // if (!isPasswordValid) {
-          //   return null;
-          // }
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            return null;
+          }
 
           return user;
         } catch (error) {

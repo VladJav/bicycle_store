@@ -53,11 +53,11 @@ const ProductConfiguration = ({
         </div>
       </div>
 
-      <div className="flex space-x-4">
-        <AddToCart handleAddToCart={handleAddToCart} />
-        <AddToWishlist />
-        <ShareProduct name={title} description={description || ''} />
-      </div>
+	      <div className="flex space-x-4">
+	        <AddToCart handleAddToCart={handleAddToCart} />
+	        <AddToWishlist productId={id} />
+	        <ShareProduct name={title} description={description || ''} />
+	      </div>
     </>
   );
 };

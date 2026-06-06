@@ -15,7 +15,7 @@ type Review = {
 };
 
 type ProductWithRating = Bicycle & {
-  rating: number;
+  rating: string;
   reviews: Review[];
 };
 
@@ -71,7 +71,7 @@ export default function ProductsList({ products }: { products: ProductWithRating
                   <svg
                     key={rating}
                     className={`h-4 w-4 ${
-                      product.rating > rating
+	                      Number(product.rating) > rating
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'fill-muted text-muted'
                     }`}

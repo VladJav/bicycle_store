@@ -15,6 +15,7 @@ import { Label } from '@src/components/ui/label';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { signIn, signOut } from 'next-auth/react';
+import { toast } from 'sonner';
 
 export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,10 +53,17 @@ export default function SignInPage() {
         email: values.email,
         password: values.password,
         redirect: false,
+      }).then((result) => {
+        if (result?.error) {
+          throw new Error('Invalid email or password');
+        }
       });
       router.push('/');
     } catch (error) {
-      console.error(error);
+      toast('Sign In Failed', {
+        description:
+          error instanceof Error ? error.message : 'Unable to sign in',
+      });
     } finally {
       setIsLoading(false);
       setSubmitting(false);

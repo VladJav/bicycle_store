@@ -2,16 +2,18 @@ import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from '@src/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 function StripeForm({
   total,
   onSuccess,
 }: {
   total: number;
-  onSuccess: () => void;
+  onSuccess: () => Promise<string | undefined>;
 }) {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
@@ -37,7 +39,8 @@ function StripeForm({
       if (error) {
         setErrorMessage(error.message);
       } else {
-        onSuccess();
+        const orderId = await onSuccess();
+        router.push(`/checkout/success${orderId ? `?orderId=${orderId}` : ''}`);
       }
     } catch (error) {
       setErrorMessage('An unexpected error occurred.');

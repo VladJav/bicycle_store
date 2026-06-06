@@ -25,7 +25,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     e.preventDefault();
     setIsPending(true);
     try {
-      await updateProfile(user.id, { name, phone });
+      await updateProfile({ name, phone });
       toast.success('Profile updated successfully!');
     } catch (error) {
       toast.error('Failed to update profile.');

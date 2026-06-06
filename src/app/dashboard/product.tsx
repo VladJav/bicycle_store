@@ -6,7 +6,7 @@ import { ProductActions } from '@src/components/ProductActions/ProductActions';
 interface ProductProps {
   product: Bicycle & {
     reviews: Review[];
-    orderItems: OrderItem[];
+    orderItems?: OrderItem[];
   };
 }
 
@@ -18,7 +18,7 @@ export function Product({ product }: ProductProps) {
           alt="Product image"
           className="aspect-square rounded-md object-cover"
           height="64"
-          src={product.images[0]}
+          src={product.images[0] || '/placeholder.svg'}
           width="64"
           unoptimized={true}
         />
@@ -27,13 +27,12 @@ export function Product({ product }: ProductProps) {
       <TableCell>{product.reviews.length}</TableCell>
       <TableCell className="hidden md:table-cell">{`$${product.price}`}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {product.orderItems.length}
+        {product.orderItems?.length ?? 0}
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {product.createdAt.toLocaleDateString('en-US')}
       </TableCell>
       <TableCell>
-        {/* @ts-expect-error - TODO: fix this */}
         <ProductActions product={product} />
       </TableCell>
     </TableRow>

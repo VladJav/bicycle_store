@@ -1,12 +1,17 @@
 import { Button } from '@src/components/ui/button';
 import Link from 'next/link';
 import CollectionCard from '@src/components/CollectionCard';
-// Let's use any for bicycles in the component to avoid import issues if type isn't exported perfectly
-// Actually I don't have to use Prisma types, I can just infer it or pass an abstract type.
-// Let's use any for bicycles in the component to avoid import issues if type isn't exported perfectly
-// or let's omit the exact type and use `any[]`
+import type { Bicycle } from '@generated/prisma';
 
-export default function FeaturedProducts({ bicycles }: { bicycles: any[] }) {
+type FeaturedBicycle = Bicycle & {
+  rating: string;
+};
+
+export default function FeaturedProducts({
+  bicycles,
+}: {
+  bicycles: FeaturedBicycle[];
+}) {
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-24">
       <div className="mb-12 flex items-end justify-between">

@@ -17,16 +17,20 @@ export default function ProductsFilters({ colors }: { colors: string[] }) {
     const colorsList = checked ? [...selectedColors, color] : selectedColors.filter((c) => c !== color);
     setSelectedColors(colorsList);
     
-    router.push(`/product?${updateUrlParams({
-      colors: colorsList.length > 0 ? colorsList.join(',') : null,
-    })}`);
+	    router.push(`/product?${updateUrlParams({
+	      colors: colorsList.length > 0 ? colorsList.join(',') : null,
+	      page: null,
+	    })}`);
   };
 
   const clearAllFilters = () => {
     router.push(`/product?${updateUrlParams({
-      price: null,
-      colors: null,
-    })}`);
+	      price: null,
+	      colors: null,
+	      search: null,
+	      sort: null,
+	      page: null,
+	    })}`);
     setPriceRange([100, 300]);
     setSelectedColors([]);
   };
@@ -36,9 +40,10 @@ export default function ProductsFilters({ colors }: { colors: string[] }) {
   };
 
   const handlePriceRangeCommit = (value: [number, number]) => {
-    router.push(`/product?${updateUrlParams({
-      price: `${value[0]}-${value[1]}`,
-    })}`);
+	    router.push(`/product?${updateUrlParams({
+	      price: `${value[0]}-${value[1]}`,
+	      page: null,
+	    })}`);
   };
   
   return (

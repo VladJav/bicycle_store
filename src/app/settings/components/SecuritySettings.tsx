@@ -5,12 +5,14 @@ import { Button } from '@src/components/ui/button';
 import { Input } from '@src/components/ui/input';
 import { Label } from '@src/components/ui/label';
 import { toast } from 'sonner';
+import { updatePassword } from '@src/actions/user';
+import type { Account } from '@generated/prisma';
 
 interface SecuritySettingsProps {
   user: {
     id: string;
     email: string;
-    accounts?: any[];
+    accounts?: Account[];
   };
 }
 
@@ -28,14 +30,19 @@ export default function SecuritySettings({ user }: SecuritySettingsProps) {
     }
     
     setIsPending(true);
-    // Simulate API call
-    setTimeout(() => {
-      toast.success('Password updated successfully (Simulated)');
+    try {
+      await updatePassword(currentPassword, newPassword);
+      toast.success('Password updated successfully');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to update password'
+      );
+    } finally {
       setIsPending(false);
-    }, 1000);
+    }
   };
 
   const isOAuthUser = user.accounts && user.accounts.length > 0;

@@ -13,10 +13,13 @@ import Image from 'next/image';
 type OrderDetailsModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  order: {
-    id: string;
-    address: string;
-    createdAt: Date;
+	  order: {
+	    id: string;
+	    address: string;
+	    shippingMethod: string;
+	    shippingCost: number;
+	    total: number;
+	    createdAt: Date;
     status: {
       title: string;
     };
@@ -24,9 +27,10 @@ type OrderDetailsModalProps = {
       name: string | null;
       email: string;
     };
-    orderItems: {
-      quantity: number;
-      bicycle: {
+	  orderItems: {
+	    quantity: number;
+	    color: string;
+	    bicycle: {
         title: string;
         price: number;
         images: string[];
@@ -37,7 +41,7 @@ type OrderDetailsModalProps = {
 
 export function OrderDetailsModal({ isOpen, onClose, order }: OrderDetailsModalProps) {
   const totalItems = order.orderItems.reduce((acc, item) => acc + item.quantity, 0);
-  const totalAmount = order.orderItems.reduce(
+  const totalAmount = order.total || order.orderItems.reduce(
     (acc, item) => acc + item.quantity * item.bicycle.price,
     0
   );
@@ -74,13 +78,18 @@ export function OrderDetailsModal({ isOpen, onClose, order }: OrderDetailsModalP
                       <h4>{item.bicycle.title}</h4>
                       <p>${item.bicycle.price.toFixed(2)}</p>
                     </div>
-                    <div className="flex items-end justify-between text-sm">
-                      <p className="text-muted-foreground">Quantity: {item.quantity}</p>
-                      <p className="font-medium">
-                        ${(item.quantity * item.bicycle.price).toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
+	                    <div className="flex items-end justify-between text-sm">
+	                      <p className="text-muted-foreground">Quantity: {item.quantity}</p>
+	                      <p className="font-medium">
+	                        ${(item.quantity * item.bicycle.price).toFixed(2)}
+	                      </p>
+	                    </div>
+	                    {item.color && (
+	                      <p className="text-sm text-muted-foreground">
+	                        Color: {item.color}
+	                      </p>
+	                    )}
+	                  </div>
                 </div>
               ))}
             </div>
@@ -89,11 +98,15 @@ export function OrderDetailsModal({ isOpen, onClose, order }: OrderDetailsModalP
           <Separator />
 
           <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <p>Total Items</p>
-              <p>{totalItems}</p>
-            </div>
-            <div className="flex justify-between font-semibold">
+	            <div className="flex justify-between text-sm">
+	              <p>Total Items</p>
+	              <p>{totalItems}</p>
+	            </div>
+	            <div className="flex justify-between text-sm">
+	              <p>Shipping ({order.shippingMethod})</p>
+	              <p>${order.shippingCost.toFixed(2)}</p>
+	            </div>
+	            <div className="flex justify-between font-semibold">
               <p>Total Amount</p>
               <p>${totalAmount.toFixed(2)}</p>
             </div>

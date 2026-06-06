@@ -59,7 +59,6 @@ export default function SignUpPage() {
     verificationToken: '',
   };
   const [showVerification, setShowVerification] = useState(false);
-  const [verificationToken, setVerificationToken] = useState<number | null>();
   const [resendCooldown, setResendCooldown] = useState(0);
   const [verificationError, setVerificationError] = useState('');
 
@@ -76,12 +75,11 @@ export default function SignUpPage() {
     setVerificationError('');
     if (!showVerification) {
       try {
-        const token = await sendVerificationEmail(values.email);
-        setVerificationToken(token);
+        await sendVerificationEmail(values.email);
         setShowVerification(true);
+        setResendCooldown(60);
         return;
-      } catch (error: unknown) {
-        console.error('Verification email error:', error);
+      } catch {
         toast('Email Verification Failed', {
           position: 'bottom-left',
           description: 'Could not send verification email. Please check your email address and try again.',
@@ -90,20 +88,30 @@ export default function SignUpPage() {
       }
     }
 
-    console.log(values.verificationToken, verificationToken);
-    if (values.verificationToken !== String(verificationToken)) {
-      setVerificationError('Invalid verification code');
+    if (!values.verificationToken) {
+      setVerificationError('Verification code is required');
       return;
     }
-    console.log(2);
     
     try {
-      await registerUser(values.name, values.email, values.password);
+      await registerUser(
+        values.name,
+        values.email,
+        values.password,
+        values.verificationToken
+      );
+      await signIn('credentials', {
+        email: values.email,
+        password: values.password,
+        callbackUrl: '/',
+      });
     } catch (error) {
-      console.log(error);
       toast('Account Creation Failed', {
         position: 'bottom-left',
-        description: 'An account with this email already exists. Please sign in or use a different email address.',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Please check your verification code and try again.',
       });
     }
   };
@@ -259,12 +267,11 @@ export default function SignUpPage() {
                           <Button
                             variant="secondary"
                             type="button"
-                            disabled={resendCooldown > 0}
-                            onClick={async () => {
-                              const verificationToken = await sendVerificationEmail(values.email);
-                              setVerificationToken(verificationToken);
-                              setResendCooldown(60);
-                            }}
+	                            disabled={resendCooldown > 0}
+	                            onClick={async () => {
+	                              await sendVerificationEmail(values.email);
+	                              setResendCooldown(60);
+	                            }}
                           >
                             {resendCooldown > 0
                               ? `Resend (${resendCooldown}s)`

@@ -72,13 +72,13 @@ export default function AppearanceSettings() {
               theme === 'system' ? 'border-primary ring-2 ring-primary ring-offset-2 ring-offset-background' : 'border-border'
             }`}
           >
-            <div className="aspect-[4/3] rounded border border-border overflow-hidden flex flex-col mb-3">
-              <div className="flex-1 bg-white flex items-center justify-center">
-                 <div className="h-2 bg-zinc-200 rounded w-1/2"></div>
-              </div>
-              <div className="flex-1 bg-zinc-950 flex items-center justify-center">
-                 <div className="h-2 bg-zinc-800 rounded w-1/2"></div>
-              </div>
+	            <div className="aspect-[4/3] rounded border border-border overflow-hidden flex flex-col mb-3">
+	              <div className="flex-1 bg-white flex items-center justify-center">
+	                <div className="h-2 bg-zinc-200 rounded w-1/2"></div>
+	              </div>
+	              <div className="flex-1 bg-zinc-950 flex items-center justify-center">
+	                <div className="h-2 bg-zinc-800 rounded w-1/2"></div>
+	              </div>
             </div>
             <div className="flex items-center justify-between">
               <Label className="cursor-pointer">System</Label>

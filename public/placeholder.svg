@@ -1,0 +1,11 @@
+<svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="640" rx="32" fill="#F3F4F6"/>
+  <circle cx="214" cy="398" r="70" stroke="#415444" stroke-width="22"/>
+  <circle cx="438" cy="398" r="70" stroke="#415444" stroke-width="22"/>
+  <path d="M214 398L288 278H364L438 398H316L214 398Z" stroke="#415444" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M288 278L262 230H330" stroke="#415444" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M364 278L396 230H450" stroke="#415444" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M245 210H325" stroke="#111827" stroke-width="20" stroke-linecap="round"/>
+  <path d="M426 230C444 230 461 238 474 251" stroke="#111827" stroke-width="20" stroke-linecap="round"/>
+  <text x="320" y="504" text-anchor="middle" fill="#6B7280" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">BIKE IMAGE</text>
+</svg>

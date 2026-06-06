@@ -37,6 +37,7 @@ import { Input } from '@src/components/ui/input';
 import { useState } from 'react';
 import { createStatus, updateStatus, deleteStatus } from '@src/actions/statuses';
 import { useFormStatus } from 'react-dom';
+import { toast } from 'sonner';
 
 type Status = {
   id: string;
@@ -72,7 +73,9 @@ export function StatusesTable({
   }
 
   function nextPage() {
-    router.push(`/dashboard/statuses?offset=${offset}`, { scroll: false });
+    router.push(`/dashboard/statuses?offset=${offset + statusesPerPage}`, {
+      scroll: false,
+    });
   }
 
   async function handleCreate(formData: FormData) {
@@ -90,12 +93,22 @@ export function StatusesTable({
   }
 
   async function handleDelete(id: string) {
-    await deleteStatus(id);
+    try {
+      await deleteStatus(id);
+      router.refresh();
+    } catch (error) {
+      toast('Status not deleted', {
+        description:
+          error instanceof Error ? error.message : 'Unable to delete status',
+      });
+    }
   }
 
   function handleEditClick(status: Status) {
-    setSelectedStatus(status);
-    setEditOpen(true);
+    window.setTimeout(() => {
+      setSelectedStatus(status);
+      setEditOpen(true);
+    }, 0);
   }
 
   return (
@@ -160,13 +173,18 @@ export function StatusesTable({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleEditClick(status)}>
+                        <DropdownMenuItem
+                          onSelect={() => handleEditClick(status)}
+                        >
                           Edit Status
                         </DropdownMenuItem>
-                        <DropdownMenuItem className='text-destructive'>
-                          <form action={() => handleDelete(status.id)}>
-                            <button type='submit'>Delete Status</button>
-                          </form>
+                        <DropdownMenuItem
+                          className='text-destructive'
+                          onSelect={() => {
+                            void handleDelete(status.id);
+                          }}
+                        >
+                          Delete Status
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -235,4 +253,4 @@ export function StatusesTable({
       </Dialog>
     </>
   );
-} 
+}

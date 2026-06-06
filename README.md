@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Biker Bicycle Store
 
-## Getting Started
+Final college project: a Next.js bicycle store with product browsing, cart, checkout, profile order history, and an admin dashboard.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js 15
+- React 19
+- Prisma + PostgreSQL
+- NextAuth credentials and Google auth
+- Stripe Payment Element
+- Tailwind CSS / shadcn-style UI components
+
+## Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env` with the required values:
+
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+NEXTAUTH_SECRET="replace-with-a-long-random-secret"
+NEXTAUTH_URL="http://localhost:3000"
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+STRIPE_SECRET_KEY="sk_test_..."
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_..."
+AWS_ACCESS_KEY_ID=""
+AWS_SECRET_ACCESS_KEY=""
+AWS_REGION=""
+AWS_BUCKET_NAME=""
+```
+
+3. Apply migrations and generate Prisma client:
+
+```bash
+npx prisma migrate dev
+npx prisma generate
+```
+
+4. Seed demo data:
+
+```bash
+npm exec prisma db seed
+```
+
+Demo accounts:
+
+- Admin: `admin@biker.test` / `Admin12345`
+- Customer: `customer@biker.test` / `Customer12345`
+
+5. Start the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Demo Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Browse products from the home page or `/product`.
+- Use search, price/color filters, and sorting.
+- Add bicycles to cart with selected color and quantity.
+- Sign in as the customer and complete checkout with Stripe test card `4242 4242 4242 4242`.
+- View saved orders in `/profile`.
+- Sign in as admin and manage products, customers, orders, and statuses in `/dashboard`.
 
-## Learn More
+## Useful Commands
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx tsc --noEmit
+npm run build
+npx prisma studio
+```

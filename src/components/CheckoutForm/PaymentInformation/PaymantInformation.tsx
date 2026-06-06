@@ -22,7 +22,6 @@ import { Bicycle } from '@generated/prisma';
 import { CheckoutTabs } from '@src/constants/core';
 import { DeliveryDetails, ShippingDetails } from '@src/types/Checkout';
 import { createOrder } from '@src/actions/orders';
-import { useSession } from 'next-auth/react';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''
@@ -46,7 +45,6 @@ const PaymentInformation = ({
   const [isLoading, setIsLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<string>('card');
   const [total, setTotal] = useState<number>(0);
-  const { data } = useSession();
   const { items } = useCartStore();
 
   useEffect(() => {
@@ -66,11 +64,13 @@ const PaymentInformation = ({
             };
           })
           .filter((item) => item !== null);
-        const total = cartItems.reduce(
-          (acc, item) => acc + item.price * item.quantity,
-          0
-        );
-        setTotal(total);
+
+        if (cartItems.length === 0) {
+          setClientSecret(null);
+          setStripeIntentId(null);
+          setTotal(0);
+          return;
+        }
 
         const formattedShippingInfo = {
           address: {
@@ -85,19 +85,15 @@ const PaymentInformation = ({
           carrier: selectedShipping.shippingOption,
         };
 
-        const { clientSecret, paymentIntentId } = await createStripeIntent(
-          total,
-          'usd',
-          {
-            items: JSON.stringify({
-              cartItems,
-            }),
-          },
+        const { clientSecret, paymentIntentId, total } = await createStripeIntent(
+          items,
+          selectedShipping.shippingOption,
           formattedShippingInfo
         );
 
         setClientSecret(clientSecret);
         setStripeIntentId(paymentIntentId);
+        setTotal(total);
       } catch (error) {
         console.error('Error creating payment intent:', error);
         toast('Error', {
@@ -110,18 +106,12 @@ const PaymentInformation = ({
     createPaymentIntent();
   }, [shippingDetails, selectedShipping, items, bicycles]);
 
-  const handlePaymentSuccess = () => {
+  const handlePaymentSuccess = async () => {
     if (!stripeIntentId) return;
-    if (!data || !data.user || !data.user.id) return;
-    createOrder({
+    const order = await createOrder({
       stripeIntentId,
-      address: shippingDetails.address,
-      userId: data.user.id,
-      items: items.map((item) => ({
-        quantity: item.quantity,
-        bicycleId: item.id,
-      })),
     });
+    return order.id;
   };
 
   return (

@@ -4,11 +4,11 @@ import { AvatarImage } from '@src/components/ui/avatar';
 import Link from 'next/link';
 import Image from 'next/image';
 import CartButton from '@src/components/CartButton/CartButton';
-import { Input } from '@src/components/ui/input';
 import { Button } from '@src/components/ui/button';
 import { auth } from '@src/lib/auth';
-import { Search } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@src/components/ui/dropdown-menu';
+import ProductSearchInput from '@src/components/ProductSearchInput/ProductSearchInput';
+import LogoutMenuItem from '@src/components/Auth/LogoutMenuItem';
 
 export default async function Header() {
   const session = await auth();
@@ -36,10 +36,7 @@ export default async function Header() {
           </nav>
         </div>
         <div className="flex items-center gap-6">
-          <div className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input className="w-64 pl-10 bg-background text-foreground" placeholder="Search products" />
-          </div>
+	          <ProductSearchInput className="hidden w-64 md:block" />
           <CartButton />
           {session && session.user ? (
             <div className="flex items-center gap-2">
@@ -68,9 +65,7 @@ export default async function Header() {
                     <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator />
-                  <Link href="/auth/sign-in" className="w-full">
-                    <DropdownMenuItem className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive">Log out</DropdownMenuItem>
-                  </Link>
+	                  <LogoutMenuItem />
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

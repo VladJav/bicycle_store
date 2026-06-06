@@ -1,21 +1,32 @@
 import type React from 'react';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import OrderSummary from '@src/components/OrderSummary/OrderSummary';
-import CheckoutFormComponent from '@src/components/CheckoutForm/CheckoutForm';
 import prisma from '@src/lib/prisma';
 import { auth } from '@src/lib/auth';
+import { redirect } from 'next/navigation';
+import CheckoutContent from '@src/components/CheckoutForm/CheckoutContent';
 
 export default async function CheckoutPage() {
   const bicycles = await prisma.bicycle.findMany();
   const session = await auth();
-  
-  let user = null;
-  if (session?.user?.id) {
-    user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-    });
+
+  if (!session?.user?.id) {
+    redirect('/auth/sign-in');
   }
+  
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: {
+      name: true,
+      email: true,
+      phone: true,
+      addressLine1: true,
+      city: true,
+      state: true,
+      zip: true,
+      country: true,
+    },
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 md:p-8">
@@ -35,11 +46,7 @@ export default async function CheckoutPage() {
           <p className="text-muted-foreground">Complete your purchase</p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          <OrderSummary bicycles={bicycles} />
-
-          <CheckoutFormComponent bicycles={bicycles} user={user} />
-        </div>
+        <CheckoutContent bicycles={bicycles} user={user} />
       </div>
     </div>
   );

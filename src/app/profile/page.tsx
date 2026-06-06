@@ -62,14 +62,21 @@ export default async function ProfilePage() {
                     </div>
                     
                     <div className="space-y-3">
-                      {order.orderItems.map((item) => (
-                        <div key={item.id} className="flex justify-between items-center text-sm">
-                          <span>{item.quantity}x {item.bicycle.title}</span>
-                          <span className="font-medium">${(item.quantity * item.bicycle.price).toFixed(2)}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+	                      {order.orderItems.map((item) => (
+	                        <div key={item.id} className="flex justify-between items-center text-sm">
+	                          <span>
+	                            {item.quantity}x {item.bicycle.title}
+	                            {item.color ? ` (${item.color})` : ''}
+	                          </span>
+	                          <span className="font-medium">${(item.quantity * item.bicycle.price).toFixed(2)}</span>
+	                        </div>
+	                      ))}
+	                    </div>
+	                    <div className="flex justify-between items-center border-t pt-3 text-sm font-medium">
+	                      <span>{order.shippingMethod}</span>
+	                      <span>Total ${order.total.toFixed(2)}</span>
+	                    </div>
+	                  </div>
                 ))}
               </div>
             ) : (

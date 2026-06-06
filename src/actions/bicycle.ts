@@ -1,13 +1,22 @@
 'use server';
 
 import prisma from '@src/lib/prisma';
-import { Review, Bicycle } from '@generated/prisma';
+import { Review, Bicycle, Prisma, User } from '@generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImageToS3 } from '@src/lib/aws/bucketActions';
+import { requireAdmin } from '@src/lib/authz';
+
+type ReviewWithUser = Review & {
+  user: User;
+};
 
 interface BicycleWithReviews extends Bicycle {
   reviews: Review[];
   rating: string;
+}
+
+interface BicycleWithUserReviews extends Omit<BicycleWithReviews, 'reviews'> {
+  reviews: ReviewWithUser[];
 }
 
 interface CreateBicycleData
@@ -21,14 +30,14 @@ interface UpdateBicycleData
 }
 
 interface Params {
-  where?: Record<string, unknown>;
-  orderBy?: Record<string, unknown>;
+  where?: Prisma.BicycleWhereInput;
+  orderBy?: Prisma.BicycleOrderByWithRelationInput;
   skip?: number;
   take?: number;
-  include?: Record<string, boolean>;
+  include?: Prisma.BicycleInclude;
 }
 
-export async function getBicycle(id: string): Promise<BicycleWithReviews> {
+export async function getBicycle(id: string): Promise<BicycleWithUserReviews> {
   const bicycle = await prisma.bicycle.findUniqueOrThrow({
     where: { id },
     include: {
@@ -70,8 +79,7 @@ export async function getAllBicycles(params: Params): Promise<Array<BicycleWithR
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getBicyclesCount(params: any) {
+export async function getBicyclesCount(params: Prisma.BicycleCountArgs) {
   const count = await prisma.bicycle.count(params);
   return count;
 }
@@ -88,6 +96,8 @@ export async function getAllBicyclesColors() {
 }
 
 export async function createBicycle(data: CreateBicycleData) {
+  await requireAdmin();
+
   const images = await Promise.all(
     data.images.map(async (image) => {
       const { url } = await uploadImageToS3(image);
@@ -100,6 +110,8 @@ export async function createBicycle(data: CreateBicycleData) {
 }
 
 export async function deleteBicycle(id: string) {
+  await requireAdmin();
+
   await prisma.bicycle.delete({
     where: { id }
   });
@@ -107,6 +119,8 @@ export async function deleteBicycle(id: string) {
 }
 
 export async function updateBicycle(id: string, data: UpdateBicycleData) {
+  await requireAdmin();
+
   const existingImages = data.images.filter(
     (image) => typeof image === 'string'
   );

@@ -7,12 +7,13 @@ export default async function StatusesPage({
   searchParams: Promise<{ offset?: string }>;
 }) {
   const { offset } = await searchParams;
+  const offsetValue = Number(offset) || 5;
   const { statuses, total } = await getStatuses({
-    skip: offset ? Number(offset) - 5 : 0,
+    skip: Math.max(0, offsetValue - 5),
     take: 5,
   });
 
   return (
-    <StatusesTable statuses={statuses} offset={Number(offset)} totalStatuses={total} />
+    <StatusesTable statuses={statuses} offset={offsetValue} totalStatuses={total} />
   );
 }

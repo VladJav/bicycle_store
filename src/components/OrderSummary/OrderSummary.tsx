@@ -12,10 +12,18 @@ import { Separator } from '@src/components/ui/separator';
 import useCartStore from '@src/store/useCartStore';
 import { useMemo } from 'react';
 import type { Bicycle } from '@generated/prisma';
+import { shippingOptions } from '@src/constants/core';
+import { DeliveryDetails } from '@src/types/Checkout';
 
 type CartItem = Bicycle & { quantity?: number; selectedColor?: string };
 
-const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
+const OrderSummary = ({
+  bicycles,
+  selectedShipping,
+}: {
+  bicycles: Bicycle[];
+  selectedShipping: DeliveryDetails;
+}) => {
   const { items } = useCartStore();
   const cartItems = useMemo(() => {
     return items
@@ -41,8 +49,12 @@ const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
   }, [cartItems]);
 
   const shippingCost = useMemo(() => {
-    return 0;
-  }, []);
+    return (
+      shippingOptions.find(
+        (option) => option.id === selectedShipping.shippingOption
+      )?.price ?? 0
+    );
+  }, [selectedShipping.shippingOption]);
 
   const tax = useMemo(() => {
     return 0;
@@ -80,8 +92,8 @@ const OrderSummary = ({ bicycles }: { bicycles: Bicycle[] }) => {
                     <p className="ml-4">${item.price.toFixed(2)}</p>
                   </div>
                   <div className="flex items-end justify-between text-sm">
-                    <p className="text-muted-foreground">Quality {item.quantity}</p>
-                    <p className="ml-4">${(item.quantity || 0) * item.price}</p>
+                    <p className="text-muted-foreground">Quantity {item.quantity}</p>
+                    <p className="ml-4">${((item.quantity || 0) * item.price).toFixed(2)}</p>
                   </div>
                   <div className="flex items-end justify-between text-sm">
                     <p className="text-muted-foreground">Color {item.selectedColor}</p>

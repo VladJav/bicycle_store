@@ -1,5 +1,7 @@
 'use server';
 import Stripe from 'stripe';
+import { requireUser } from '@src/lib/authz';
+import { calculateCheckout, CheckoutCartItemInput } from '@src/lib/checkout';
 
 interface Address {
   city: string;
@@ -16,23 +18,32 @@ interface Shipping {
 }
 
 export async function createStripeIntent(
-  amount: number,
-  currency: string = 'usd',
-  metadata: Record<string, string> = {},
+  items: CheckoutCartItemInput[],
+  shippingOption: string,
   shipping: Shipping,
+  currency: string = 'usd',
 ) {
+  const session = await requireUser();
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: '2025-03-31.basil',
   });
+  const checkout = await calculateCheckout(items, shippingOption);
 
-  if (!amount || amount <= 0) {
+  if (!checkout.amount || checkout.amount <= 0) {
     throw new Error('Invalid amount');
   }
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: Math.round(amount * 100),
+    amount: checkout.amount,
     currency,
-    metadata,
+    metadata: {
+      userId: session.user.id,
+      cartItems: JSON.stringify(checkout.cartItems),
+      shippingOption: checkout.shippingOption.id,
+      shippingCost: checkout.shippingCost.toFixed(2),
+      subtotal: checkout.subtotal.toFixed(2),
+      total: checkout.total.toFixed(2),
+    },
     shipping,
     automatic_payment_methods: {
       enabled: true,
@@ -42,5 +53,8 @@ export async function createStripeIntent(
   return {
     clientSecret: paymentIntent.client_secret,
     paymentIntentId: paymentIntent.id,
+    total: checkout.total,
+    subtotal: checkout.subtotal,
+    shippingCost: checkout.shippingCost,
   };
 }
