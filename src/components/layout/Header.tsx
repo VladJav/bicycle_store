@@ -19,8 +19,8 @@ export default async function Header() {
         <div className="flex items-center">
           <Link href="/" className="mr-8">
             <Image
-              src="/images/generated-image (1).png"
-              alt="Fashion Store"
+              src="/images/bicycle-logo.png"
+              alt="BIker"
               width={150}
               height={40}
               className="h-12 w-auto dark:invert"
