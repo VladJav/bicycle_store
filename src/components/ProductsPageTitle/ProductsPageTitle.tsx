@@ -52,7 +52,7 @@ export default function ProductsPageTitle({
               All Products
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              {count} results
+              {count} {count === 1 ? 'result' : 'results'}
             </p>
           </div>
 

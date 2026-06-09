@@ -4,13 +4,27 @@ import { Suspense } from 'react';
 import ProductsFilters from '@src/components/ProductsFilters/ProductsFilters';
 import ProductsPageTitle from '@src/components/ProductsPageTitle/ProductsPageTitle';
 import ProductsListSection from '@src/components/ProductsListSection/ProductsListSection';
-import { getAllBicyclesColors, getBicyclesCount } from '@src/actions/bicycle';
-import { Prisma } from '@generated/prisma';
+import {
+  getAllBicyclesColors,
+  getBicycleCategoryCounts,
+  getBicyclesCount,
+} from '@src/actions/bicycle';
+import {
+  createBicycleWhere,
+  getBicycleCategory,
+} from '@src/lib/bicycleCategories';
 
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page: string; price: string; colors: string; search: string; sort: string }>;
+  searchParams: Promise<{
+    page?: string;
+    price?: string;
+    colors?: string;
+    search?: string;
+    sort?: string;
+    category?: string;
+  }>;
 }) {
   const {
     page = '1',
@@ -18,50 +32,44 @@ export default async function ProductsPage({
     colors,
     search,
     sort = 'price-low-high',
+    category,
   } = await searchParams;
-  const colorsList = await getAllBicyclesColors();
-  const priceRange = price?.split('-').map((value) => parseInt(value));
-  const where: Prisma.BicycleWhereInput = {
-    price: priceRange
-      ? {
-        gte: priceRange[0],
-        lte: priceRange[1],
-      }
-      : {
-        gte: 100,
-        lte: Number.MAX_SAFE_INTEGER,
-      },
-    colors: colors ? {
-      hasSome: colors.split(','),
-    } : undefined,
-    OR: search
-      ? [
-        {
-          title: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-      ]
-      : undefined,
-  };
+  const selectedCategoryDetails = getBicycleCategory(category);
+  const selectedCategory = selectedCategoryDetails?.id;
+  const [colorsList, categoryCounts] = await Promise.all([
+    getAllBicyclesColors(),
+    getBicycleCategoryCounts(),
+  ]);
+  const selectedCategoryIds = selectedCategory
+    ? categoryCounts.idsByCategory[selectedCategory] ?? []
+    : undefined;
+  const where = createBicycleWhere({
+    price,
+    colors,
+    search,
+    categoryIds: selectedCategoryIds,
+  });
   const bicyclesCount = await getBicyclesCount({ where });
 
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-        <nav className="flex text-sm text-muted-foreground">
+        <nav className="flex flex-wrap items-center gap-y-1 text-sm text-muted-foreground" aria-label="Breadcrumb">
           <Link href="/" className="hover:text-foreground">
             Home
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-foreground">All Products</span>
+          {selectedCategoryDetails ? (
+            <>
+              <Link href="/product" className="hover:text-foreground">
+                All Products
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-foreground">{selectedCategoryDetails.label}</span>
+            </>
+          ) : (
+            <span className="text-foreground">All Products</span>
+          )}
         </nav>
       </div>
 
@@ -82,6 +90,8 @@ export default async function ProductsPage({
                 colors={colors}
                 search={search}
                 sort={sort}
+                category={selectedCategory}
+                categoryIds={selectedCategoryIds}
               />
             </Suspense>
           </div>

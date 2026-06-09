@@ -9,6 +9,7 @@ import { auth } from '@src/lib/auth';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@src/components/ui/dropdown-menu';
 import ProductSearchInput from '@src/components/ProductSearchInput/ProductSearchInput';
 import LogoutMenuItem from '@src/components/Auth/LogoutMenuItem';
+import ShopCategoryMenu from '@src/components/layout/ShopCategoryMenu';
 
 export default async function Header() {
   const session = await auth();
@@ -30,9 +31,7 @@ export default async function Header() {
             <Link href="/" className="text-muted-foreground hover:text-foreground">
               Home
             </Link>
-            <Link href="/product" className="text-muted-foreground hover:text-foreground">
-              Shop
-            </Link>
+            <ShopCategoryMenu />
           </nav>
         </div>
         <div className="flex items-center gap-6">

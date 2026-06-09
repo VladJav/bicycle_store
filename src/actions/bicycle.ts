@@ -5,6 +5,11 @@ import { Review, Bicycle, Prisma, User } from '@generated/prisma';
 import { revalidatePath } from 'next/cache';
 import { uploadImageToS3 } from '@src/lib/aws/bucketActions';
 import { requireAdmin } from '@src/lib/authz';
+import {
+  BICYCLE_CATEGORIES,
+  getBicycleCategoryId,
+  type BicycleCategoryWithCount,
+} from '@src/lib/bicycleCategories';
 
 type ReviewWithUser = Review & {
   user: User;
@@ -93,6 +98,38 @@ export async function getAllBicyclesColors() {
 
   const allColors = bicycles.flatMap((bicycle) => bicycle.colors);
   return [...new Set(allColors)];
+}
+
+export async function getBicycleCategoryCounts(): Promise<{
+  total: number;
+  categories: BicycleCategoryWithCount[];
+  idsByCategory: Record<string, string[]>;
+}> {
+  const bicycles = await prisma.bicycle.findMany({
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      features: true,
+    },
+  });
+  const idsByCategory = Object.fromEntries(
+    BICYCLE_CATEGORIES.map((category) => [category.id, [] as string[]])
+  );
+
+  bicycles.forEach((bicycle) => {
+    const categoryId = getBicycleCategoryId(bicycle);
+
+    if (categoryId) {
+      idsByCategory[categoryId].push(bicycle.id);
+    }
+  });
+  const categories = BICYCLE_CATEGORIES.map((category) => ({
+    ...category,
+    count: idsByCategory[category.id].length,
+  }));
+
+  return { total: bicycles.length, categories, idsByCategory };
 }
 
 export async function createBicycle(data: CreateBicycleData) {

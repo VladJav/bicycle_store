@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ProductsList from '@src/components/ProductsList/ProductsList';
 import { getAllBicycles, getBicyclesCount } from '@src/actions/bicycle';
 import { Prisma } from '@generated/prisma';
+import { createBicycleWhere } from '@src/lib/bicycleCategories';
 
 const BICYCLES_PER_PAGE = 10;
 const pageButtonClass =
@@ -20,45 +21,19 @@ export default async function ProductsListSection({
   colors,
   search,
   sort = 'price-low-high',
+  category,
+  categoryIds,
 }: {
   page: string;
   price?: string;
   colors?: string;
   search?: string;
   sort?: string;
+  category?: string;
+  categoryIds?: string[];
 }) {
   const currentPage = Math.max(1, parseInt(page) || 1);
-  const priceRange = price?.split('-').map((value) => parseInt(value));
-  const where: Prisma.BicycleWhereInput = {
-    price: priceRange
-      ? {
-        gte: priceRange[0],
-        lte: priceRange[1],
-      }
-      : {
-        gte: 100,
-        lte: Number.MAX_SAFE_INTEGER,
-      },
-    colors: colors ? {
-      hasSome: colors.split(','),
-    } : undefined,
-    OR: search
-      ? [
-        {
-          title: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-        {
-          description: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
-      ]
-      : undefined,
-  };
+  const where = createBicycleWhere({ price, colors, search, categoryIds });
 
   const orderBy: Prisma.BicycleOrderByWithRelationInput =
     sort === 'price-high-low'
@@ -92,10 +67,12 @@ export default async function ProductsListSection({
     if (colors) params.set('colors', colors);
     if (search) params.set('search', search);
     if (sort) params.set('sort', sort);
+    if (category) params.set('category', category);
 
     const query = params.toString();
     return `/product${query ? `?${query}` : ''}`;
   };
+  const clearFiltersHref = category ? `/product?category=${category}` : '/product';
 
   return (
     <div className="lg:col-span-3">
@@ -107,7 +84,7 @@ export default async function ProductsListSection({
           <p className="mt-1 text-sm text-muted-foreground">
             Try adjusting your filters or search query.
           </p>
-          <Link href="/product" className={clearFiltersClass}>
+          <Link href={clearFiltersHref} className={clearFiltersClass}>
             Clear All Filters
           </Link>
         </div>
